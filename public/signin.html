@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathlight</title>
+    <meta name="description" content="Sign in or create an account for Pathlight.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme auth-page">
+    <div class="noise-overlay"></div>
+
+    <div class="ambient-bg">
+        <div class="ambient-glow glow-1"></div>
+        <div class="ambient-glow glow-2"></div>
+        <div class="ambient-glow glow-3"></div>
+    </div>
+
+    <div class="auth-centered-layout">
+        <div class="auth-card observe-fade delay-1">
+            <div class="auth-card-border"></div>
+            
+            <div class="auth-view-container">
+                <!-- ==================== SIGN IN VIEW ==================== -->
+                <div id="view-signin" class="auth-view view-active">
+                    <div class="auth-header">
+                        <a href="index.html"><img src="pathlight_logo.png" alt="Pathlight Logo" class="auth-logo"></a>
+                        <h2>Welcome back</h2>
+                        <p>Sign in to your account.</p>
+                    </div>
+
+                    <div class="social-row">
+                        <button id="btn-google-signin" class="btn btn-secondary social-btn-icon" aria-label="Continue with Google">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                        </button>
+                        <button class="btn btn-secondary social-btn-icon" aria-label="Continue with LinkedIn">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </button>
+                        <button class="btn btn-secondary social-btn-icon" aria-label="Continue with GitHub">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="auth-divider">or continue with email</div>
+
+                    <form id="form-signin">
+                        <div class="form-group form-floating">
+                            <input type="email" id="email" class="form-input" placeholder=" " required>
+                            <label for="email" class="form-label">Email Address</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input type="password" id="password" class="form-input" placeholder=" " required>
+                            <label for="password" class="form-label">Password</label>
+                            <button type="button" class="password-toggle togglePassword" aria-label="Toggle password visibility">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
+                        
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="checkbox-input" checked>
+                                Remember me
+                            </label>
+                            <a href="#" class="forgot-link" onclick="switchAuthView('view-forgot-password'); return false;">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg glow-btn btn-shimmer auth-submit">Sign In</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        Don't have an account? <a href="#" onclick="switchAuthView('view-signup'); return false;">Sign up</a>
+                    </div>
+                </div>
+
+                <!-- ==================== SIGN UP VIEW ==================== -->
+                <div id="view-signup" class="auth-view view-hidden">
+                    <div class="auth-header">
+                        <a href="index.html"><img src="pathlight_logo.png" alt="Pathlight Logo" class="auth-logo"></a>
+                        <h2>Create your account</h2>
+                        <p>Start building your AI Career Agent.</p>
+                    </div>
+
+                    <div class="social-row">
+                        <button id="btn-google-signup" class="btn btn-secondary social-btn-icon" aria-label="Continue with Google">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                        </button>
+                        <button class="btn btn-secondary social-btn-icon" aria-label="Continue with LinkedIn">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </button>
+                        <button class="btn btn-secondary social-btn-icon" aria-label="Continue with GitHub">
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="auth-divider">or continue with email</div>
+
+                    <form id="form-signup">
+                        <div class="form-group form-floating">
+                            <input type="text" id="fullname" class="form-input" placeholder=" " required>
+                            <label for="fullname" class="form-label">Full Name</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input type="email" id="signup-email" class="form-input" placeholder=" " required>
+                            <label for="signup-email" class="form-label">Email Address</label>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input type="password" id="signup-password" class="form-input" placeholder=" " required>
+                            <label for="signup-password" class="form-label">Password</label>
+                            <button type="button" class="password-toggle togglePassword" aria-label="Toggle password visibility">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                            <!-- Password Strength Indicator -->
+                            <div class="password-strength-container">
+                                <div class="password-strength-bar" id="strength-bar-1"></div>
+                                <div class="password-strength-bar" id="strength-bar-2"></div>
+                                <div class="password-strength-bar" id="strength-bar-3"></div>
+                                <div class="password-strength-bar" id="strength-bar-4"></div>
+                            </div>
+                        </div>
+                        <div class="form-group form-floating">
+                            <input type="password" id="confirm-password" class="form-input" placeholder=" " required>
+                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                            <div class="validation-icon" id="match-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg glow-btn btn-shimmer auth-submit" style="margin-top: 2rem;">Create Account</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        Already have an account? <a href="#" onclick="switchAuthView('view-signin'); return false;">Sign In</a>
+                    </div>
+                </div>
+
+                <!-- ==================== FORGOT PASSWORD VIEW ==================== -->
+                <div id="view-forgot-password" class="auth-view view-hidden">
+                    <div class="auth-header">
+                        <a href="index.html"><img src="pathlight_logo.png" alt="Pathlight Logo" class="auth-logo"></a>
+                        <h2>Reset password</h2>
+                        <p>Enter your email and we'll send a reset link.</p>
+                    </div>
+
+                    <form id="form-forgot-password">
+                        <div class="form-group form-floating">
+                            <input type="email" id="forgot-email" class="form-input" placeholder=" " required>
+                            <label for="forgot-email" class="form-label">Email Address</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg glow-btn btn-shimmer auth-submit">Send Reset Link</button>
+                    </form>
+                    
+                    <div class="auth-footer" style="margin-top: 2rem;">
+                        <a href="#" onclick="switchAuthView('view-signin'); return false;">&larr; Back to Sign In</a>
+                    </div>
+                </div>
+
+                <!-- ==================== WELCOME / ONBOARDING START VIEW ==================== -->
+                <div id="view-onboarding" class="auth-view view-hidden">
+                    <div class="auth-header" style="margin-top: 2rem;">
+                        <img src="pathlight_logo.png" alt="Pathlight Logo" class="auth-logo onboarding-anim-1" style="margin-bottom: 2rem; transform: scale(1.1);">
+                        <h2 class="onboarding-anim-2" style="font-size: 2.25rem; font-weight: 600; letter-spacing: -0.04em;">Welcome to Pathlight</h2>
+                        <p class="onboarding-anim-3" style="font-size: 1.125rem; color: var(--text-secondary); margin-top: 1.5rem; line-height: 1.6; max-width: 400px; margin-left: auto; margin-right: auto;">
+                            Your AI Career Agent is almost ready.<br><br>
+                            In the next few minutes we'll learn about your experience, understand your career goals and prepare an AI agent that works on your behalf throughout your job search.
+                        </p>
+                    </div>
+
+                    <div class="onboarding-anim-4" style="margin-top: 2.5rem; margin-bottom: 2.5rem; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--text-tertiary); font-size: 0.875rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Estimated setup time: 2–3 minutes</span>
+                        </div>
+                        <div style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+                            Step 1 of 7
+                        </div>
+                    </div>
+
+                    <div class="onboarding-anim-5" style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <button id="btn-start-onboarding" class="btn btn-primary btn-lg glow-btn btn-shimmer" style="width: 100%; max-width: 400px;">Let's Build Your AI Agent</button>
+                        <a href="#" onclick="window.location.reload(); return false;" style="color: var(--text-tertiary); font-size: 0.875rem; text-decoration: none; transition: color 0.2s;">Back</a>
+                    </div>
+                </div>
+
+                <!-- ==================== CAREER PROFILE VIEW (STEP 2) ==================== -->
+                <div id="view-career-profile" class="auth-view view-hidden">
+                    <div class="onboarding-progress-container onboarding-anim-1">
+                        <div class="progress-label">Step 2 of 7</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 28%;"></div>
+                        </div>
+                    </div>
+                    <div class="auth-header">
+                        <h2 class="onboarding-anim-2">Career Profile</h2>
+                        <p class="onboarding-anim-3">Let's understand your current role so your AI Career Agent can personalize every recommendation.</p>
+                    </div>
+
+                    <form id="form-career-profile" class="onboarding-anim-4">
+                        <div class="form-row">
+                            <div class="form-group form-floating">
+                                <input type="text" id="ob-target-role" class="form-input" placeholder=" " required>
+                                <label for="ob-target-role" class="form-label">Target Role (e.g. SDE II, Product Manager)</label>
+                            </div>
+                            <div class="form-group form-floating">
+                                <input type="number" id="ob-yoe" class="form-input" placeholder=" " min="0" max="50" step="0.1" required>
+                                <label for="ob-yoe" class="form-label">Total Experience (Years)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group form-floating autocomplete-wrapper">
+                                <input type="text" id="ob-city" class="form-input" placeholder=" " required autocomplete="off">
+                                <label for="ob-city" class="form-label">Current City</label>
+                                <div class="autocomplete-list" id="city-autocomplete"></div>
+                            </div>
+                            <div class="form-group form-floating">
+                                <select id="ob-work-type" class="form-input" required>
+                                    <option value="" disabled selected hidden></option>
+                                    <option value="Remote">Remote</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="Office">Office</option>
+                                </select>
+                                <label for="ob-work-type" class="form-label">Preferred Work Type</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-floating">
+                            <select id="ob-notice-period" class="form-input" required>
+                                <option value="" disabled selected hidden></option>
+                                <option value="Immediate">Immediate Joiner</option>
+                                <option value="15 Days">15 Days</option>
+                                <option value="30 Days">30 Days</option>
+                                <option value="60 Days">60 Days</option>
+                                <option value="90 Days">90 Days</option>
+                            </select>
+                            <label for="ob-notice-period" class="form-label">Notice Period</label>
+                        </div>
+
+                        <div class="bottom-actions">
+                            <a href="#" class="btn-onboarding-back" onclick="switchAuthView('view-onboarding'); return false;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+                            </a>
+                            <div class="auto-save-indicator" id="save-indicator-2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                Saved just now
+                            </div>
+                            <button type="submit" class="btn-onboarding-continue">
+                                Continue <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==================== CAREER GOALS VIEW (STEP 3) ==================== -->
+                <div id="view-career-goals" class="auth-view view-hidden">
+                    <div class="onboarding-progress-container onboarding-anim-1">
+                        <div class="progress-label">Step 3 of 7</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 42%;"></div>
+                        </div>
+                    </div>
+                    <div class="auth-header">
+                        <h2 class="onboarding-anim-2">Career Goals</h2>
+                        <p class="onboarding-anim-3">Tell us about your expectations for your next move.</p>
+                    </div>
+
+                    <form id="form-career-goals" class="onboarding-anim-4">
+                        <div class="form-row">
+                            <div class="form-group form-floating">
+                                <input type="number" id="ob-current-ctc" class="form-input" placeholder=" " step="0.1" required>
+                                <label for="ob-current-ctc" class="form-label">Current CTC (₹ LPA)</label>
+                            </div>
+                            <div class="form-group form-floating">
+                                <input type="number" id="ob-expected-ctc" class="form-input" placeholder=" " step="0.1" required>
+                                <label for="ob-expected-ctc" class="form-label">Expected CTC (₹ LPA)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group form-floating autocomplete-wrapper">
+                            <input type="text" id="ob-companies-search" class="form-input" placeholder=" " autocomplete="off">
+                            <label for="ob-companies-search" class="form-label">Preferred Companies (e.g. Razorpay, CRED)</label>
+                            <div class="autocomplete-list" id="company-autocomplete"></div>
+                            <div class="skills-container" id="selected-companies-container"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group form-floating">
+                                <select id="ob-relocate" class="form-input" required>
+                                    <option value="" disabled selected hidden></option>
+                                    <option value="Yes">Yes, willing to relocate</option>
+                                    <option value="No">No, prefer current city</option>
+                                    <option value="Remote">Remote only</option>
+                                </select>
+                                <label for="ob-relocate" class="form-label">Willing to Relocate?</label>
+                            </div>
+                            <div class="form-group form-floating">
+                                <select id="ob-work-auth" class="form-input" required>
+                                    <option value="" disabled selected hidden></option>
+                                    <option value="Indian Citizen">Indian Citizen</option>
+                                    <option value="OCI">OCI / PIO</option>
+                                    <option value="Other">Other Visa</option>
+                                </select>
+                                <label for="ob-work-auth" class="form-label">Work Authorization</label>
+                            </div>
+                        </div>
+
+                        <div class="bottom-actions">
+                            <a href="#" class="btn-onboarding-back" onclick="switchAuthView('view-career-profile'); return false;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+                            </a>
+                            <div class="auto-save-indicator" id="save-indicator-3">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                Saved just now
+                            </div>
+                            <button type="submit" class="btn-onboarding-continue">
+                                Continue <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==================== SKILLS VIEW (STEP 4) ==================== -->
+                <div id="view-skills" class="auth-view view-hidden">
+                    <div class="onboarding-progress-container onboarding-anim-1">
+                        <div class="progress-label">Step 4 of 7</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 57%;"></div>
+                        </div>
+                    </div>
+                    <div class="auth-header">
+                        <h2 class="onboarding-anim-2">Your Skills</h2>
+                        <p class="onboarding-anim-3">Select or type the skills you excel at.</p>
+                    </div>
+
+                    <form id="form-skills" class="onboarding-anim-4">
+                        <div class="form-group form-floating">
+                            <input type="text" id="skill-search" class="form-input" placeholder=" " autocomplete="off">
+                            <label for="skill-search" class="form-label">Search or add custom skill...</label>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-tertiary);">Selected Skills</div>
+                        <div class="skills-container" id="selected-skills-container">
+                            <!-- Pills will be injected here via JS -->
+                        </div>
+
+                        <div style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-tertiary);">Suggestions</div>
+                        <div class="skills-container" id="suggested-skills-container">
+                            <!-- Pills will be injected here via JS -->
+                        </div>
+
+                        <div class="bottom-actions">
+                            <a href="#" class="btn-onboarding-back" onclick="switchAuthView('view-career-goals'); return false;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+                            </a>
+                            <div class="auto-save-indicator" id="save-indicator-4">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                Saved just now
+                            </div>
+                            <button type="submit" class="btn-onboarding-continue">
+                                Continue <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==================== RESUME UPLOAD VIEW (STEP 5) ==================== -->
+                <div id="view-resume" class="auth-view view-hidden">
+                    <div class="onboarding-progress-container onboarding-anim-1">
+                        <div class="progress-label">Step 5 of 7</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 71%;"></div>
+                        </div>
+                    </div>
+                    <div class="auth-header">
+                        <h2 class="onboarding-anim-2">Upload Resume</h2>
+                        <p class="onboarding-anim-3">Pathlight's AI will parse your resume to build your agent's memory.</p>
+                    </div>
+
+                    <form id="form-resume" class="onboarding-anim-4">
+                        <div class="upload-zone" id="resume-upload-zone">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <h3 id="upload-title">Drag & Drop Resume</h3>
+                            <p id="upload-desc">Supports PDF, DOCX, TXT up to 10MB.</p>
+                            <input type="file" id="resume-file" style="display: none;" accept=".pdf,.doc,.docx,.txt">
+                            <button type="button" class="btn btn-secondary" style="margin-top: 1.5rem;" onclick="document.getElementById('resume-file').click();">Browse Files</button>
+                            
+                            <div class="upload-progress-container" id="upload-progress">
+                                <div class="progress-bar-track" style="margin-bottom: 0.5rem; height: 3px;">
+                                    <div class="progress-bar-fill" id="upload-progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <p style="font-size: 0.75rem;" id="upload-status-text">Uploading and Parsing...</p>
+                            </div>
+                        </div>
+
+                        <div class="bottom-actions">
+                            <a href="#" class="btn-onboarding-back" onclick="switchAuthView('view-skills'); return false;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+                            </a>
+                            <a href="#" onclick="skipResume(); return false;" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9375rem;">Import LinkedIn Later</a>
+                            <button type="submit" class="btn-onboarding-continue" id="btn-resume-continue" disabled>
+                                Continue <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==================== CONNECT GOOGLE VIEW (STEP 6) ==================== -->
+                <div id="view-connect-google" class="auth-view view-hidden">
+                    <div class="onboarding-progress-container onboarding-anim-1">
+                        <div class="progress-label">Step 6 of 7</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="auth-header">
+                        <h2 class="onboarding-anim-2">Connect Workspace</h2>
+                        <p class="onboarding-anim-3">Give your AI Career Agent access to track recruiter emails and manage your interview calendar.</p>
+                    </div>
+
+                    <div class="onboarding-anim-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; margin-bottom: 2rem;">
+                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.5rem;">
+                            <li style="display: flex; gap: 1rem; align-items: flex-start;">
+                                <div style="background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 12px; color: var(--accent-primary);">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem;">Gmail Integration</h4>
+                                    <p style="margin: 0; color: var(--text-tertiary); font-size: 0.875rem;">Automatically identify recruiter reachouts and draft intelligent responses.</p>
+                                </div>
+                            </li>
+                            <li style="display: flex; gap: 1rem; align-items: flex-start;">
+                                <div style="background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 12px; color: #10b981;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem;">Calendar Sync</h4>
+                                    <p style="margin: 0; color: var(--text-tertiary); font-size: 0.875rem;">Schedule interviews effortlessly without double-booking.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <form id="form-connect-google" class="onboarding-anim-5">
+                        <div class="bottom-actions">
+                            <a href="#" class="btn-onboarding-back" onclick="switchAuthView('view-resume'); return false;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+                            </a>
+                            <a href="#" onclick="skipGoogle(); return false;" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9375rem;">Skip for now</a>
+                            <button type="button" onclick="window.location.href='/api/onboarding/google-connect';" class="btn-onboarding-continue" style="display: flex; align-items: center; gap: 0.75rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                                Connect Google Workspace
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==================== AI PREFERENCES VIEW (STEP 7) ==================== -->
+                <div id="view-ai-preferences" class="auth-view view-hidden">
+                    <div class="onboarding-progress-container onboarding-anim-1">
+                        <div class="progress-label">Step 7 of 7</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="auth-header">
+                        <h2 class="onboarding-anim-2">Agent Permissions</h2>
+                        <p class="onboarding-anim-3">Customize what your AI Career Agent handles autonomously.</p>
+                    </div>
+
+                    <form id="form-ai-preferences" class="onboarding-anim-4">
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 0 1.5rem;">
+                            
+                            <div class="form-toggle-row">
+                                <div class="form-toggle-info">
+                                    <h4>Auto Resume Tailoring</h4>
+                                    <p>Dynamically adjust your resume to match specific job descriptions.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-toggle-row">
+                                <div class="form-toggle-info">
+                                    <h4>Recruiter Email Drafts</h4>
+                                    <p>Draft highly-personalized responses when recruiters reach out.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-toggle-row">
+                                <div class="form-toggle-info">
+                                    <h4>Interview Coaching</h4>
+                                    <p>Send preparation materials and mock questions before interviews.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-toggle-row">
+                                <div class="form-toggle-info">
+                                    <h4>Weekly Market Reports</h4>
+                                    <p>Receive insights on salary trends and hiring momentum in your industry.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="bottom-actions">
+                            <a href="#" class="btn-onboarding-back" onclick="switchAuthView('view-connect-google'); return false;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+                            </a>
+                            <button type="submit" class="btn-onboarding-continue btn-shimmer">
+                                Finalize Setup <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==================== AI INITIALIZATION VIEW (STEP 8) ==================== -->
+                <div id="view-ai-initialization" class="auth-view view-hidden">
+                    <div class="cinematic-container">
+                        <img src="pathlight_logo.png" alt="Pathlight Logo" style="width: 64px; height: 64px; margin-bottom: 3rem; transform: scale(1.1); animation: pulse 2s infinite ease-in-out;">
+                        
+                        <div class="cinematic-step" id="cinematic-step-1">
+                            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Analyzing Resume and Experience</span>
+                        </div>
+                        <div class="cinematic-step" id="cinematic-step-2">
+                            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Structuring Skill Graph</span>
+                        </div>
+                        <div class="cinematic-step" id="cinematic-step-3">
+                            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Building Agent Memory</span>
+                        </div>
+                        <div class="cinematic-step" id="cinematic-step-4">
+                            <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Activating Neural Core</span>
+                        </div>
+
+                        <div class="cinematic-loader" id="cinematic-loader">
+                            <div class="cinematic-loader-fill" id="cinematic-loader-fill"></div>
+                        </div>
+                        <p style="color: var(--text-tertiary); font-size: 0.875rem; margin-top: 1.5rem;" id="cinematic-text">Preparing your AI Career Agent...</p>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

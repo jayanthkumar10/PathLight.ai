@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathlight | The AI Agent That Gets You Interviews</title>
+    <meta name="description" content="Stop tweaking your resume. Pathlight automates your job search, tailors applications, and books interviews for you.">
+    
+    <!-- Premium Fonts: Inter for UI, Outfit for Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <!-- Cinematic Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Ambient Living Background -->
+    <div class="ambient-bg">
+        <div class="ambient-glow glow-1"></div>
+        <div class="ambient-glow glow-2"></div>
+        <div class="ambient-glow glow-3"></div>
+    </div>
+
+    <!-- Dynamic Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <img src="pathlight_logo.png" alt="Pathlight Logo" class="brand-logo">
+            </a>
+            <div class="nav-links">
+                <a href="#features">Product</a>
+                <a href="#workflow">How it Works</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="signin.html" class="btn btn-primary btn-sm btn-shimmer" aria-label="Sign In">Sign In</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-content" data-parallax>
+                <div class="badge badge-glow observe-fade">✨ Pathlight in beta mode</div>
+                <h1 class="hero-title observe-fade delay-1">The first AI agent that actually<br>gets you <span class="text-gradient">interviews.</span></h1>
+                <p class="hero-subtitle observe-fade delay-2">Stop tweaking your resume and tracking spreadsheets. Pathlight finds opportunities, perfectly tailors your applications, and coaches you until you sign the offer.</p>
+                <div class="hero-ctas observe-fade delay-3">
+                    <button class="btn btn-primary btn-lg glow-btn btn-shimmer">Join the Beta</button>
+                    <button class="btn btn-secondary btn-lg">See How It Works</button>
+                </div>
+            </div>
+            
+            <!-- Security Banner -->
+            <div class="security-banner observe-fade delay-3">
+                <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> SOC2 Type II Certified</span>
+                <span class="dot-separator">•</span>
+                <span>End-to-End Encryption</span>
+                <span class="dot-separator">•</span>
+                <span>Zero Data Retention</span>
+            </div>
+
+            <!-- Trust Metrics -->
+            <div class="trust-metrics observe-fade delay-4">
+                <div class="metric-item">
+                    <span class="metric-value">84%</span>
+                    <span class="metric-label">Offer Rate for Active Users</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">14 min</span>
+                    <span class="metric-label">Avg. Time to First Automation</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">4,200+</span>
+                    <span class="metric-label">Interviews Scheduled This Month</span>
+                </div>
+            </div>
+            
+            <!-- ATS Integrations Marquee -->
+            <div class="integration-marquee observe-fade delay-4">
+                <p class="integration-label">Seamlessly tracks applications across</p>
+                <div class="marquee-track">
+                    <span>Workday</span>
+                    <span>Greenhouse</span>
+                    <span>Lever</span>
+                    <span>Ashby</span>
+                    <span>BambooHR</span>
+                    <span>Workday</span>
+                    <span>Greenhouse</span>
+                    <span>Lever</span>
+                    <span>Ashby</span>
+                    <span>BambooHR</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Bento Grid -->
+        <section id="features" class="bento-section">
+            <div class="section-header">
+                <h2 data-split-text>Everything you need. Nothing you don't.</h2>
+                <p class="observe-fade delay-1">A completely autonomous system designed to maximize your conversion from application to offer.</p>
+            </div>
+            
+            <div class="bento-grid perspective-grid">
+                <!-- Bento 1: Resume Tailoring -->
+                <div class="bento-card col-span-2 observe-fade" data-tilt>
+                    <div class="card-glow"></div>
+                    <div class="card-border"></div>
+                    <div class="card-content">
+                        <h3>Hyper-Tailored Applications</h3>
+                        <p>Our AI rewrites your resume for every single application to perfectly match the job description, beating ATS systems instantly.</p>
+                    </div>
+                    <div class="visualizer-container">
+                        <div class="resume-visualizer" id="resumeVisualizer">
+                            <div class="ats-score-container">
+                                <div class="ats-ring" id="atsRing"></div>
+                                <div class="ats-text">
+                                    <span id="atsNumber">45</span>%
+                                    <div class="ats-label">ATS Match</div>
+                                </div>
+                            </div>
+                            <div class="resume-lines" id="resumeLines"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bento 2: Automated Sourcing (Email) -->
+                <div class="bento-card col-span-1 observe-fade delay-1" data-tilt>
+                    <div class="card-glow"></div>
+                    <div class="card-border"></div>
+                    <div class="card-content">
+                        <h3>Inbox Zero for Job Hunts</h3>
+                        <p>We source roles and ping recruiters on your behalf. You just wake up to interview invites.</p>
+                    </div>
+                    <div class="visualizer-container align-start">
+                        <div class="email-visualizer" id="emailVisualizer">
+                            <div class="email-list" id="emailList"></div>
+                            <div class="typing-indicator hidden" id="emailTyping">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bento 3: Interview Prep (Mentor) -->
+                <div class="bento-card col-span-3 observe-fade" data-tilt>
+                    <div class="card-glow"></div>
+                    <div class="card-border"></div>
+                    <div class="card-content row-content">
+                        <div class="text-block">
+                            <h3>Ace Every Technical Round</h3>
+                            <p>Practice with an AI agent that knows the specific company's interview style. Get real-time feedback on your answers.</p>
+                        </div>
+                        <div class="visualizer-container wide-vis">
+                            <div class="mentor-visualizer" id="mentorVisualizer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section observe-fade">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">How does Pathlight avoid getting flagged by ATS? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Pathlight doesn't use generic keyword stuffing. Our models rewrite your experience contextually to match the exact requirements of the job description, making it read naturally to human recruiters while hitting every parsing requirement for Greenhouse and Lever.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Is my resume data private? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Yes. We are SOC2 Type II certified. Your data is never used to train foundational models, and we employ end-to-end encryption for all stored documents.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">How many applications can it send per day? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">In Beta, we limit autonomous applications to 25 highly curated roles per day to maintain absolute quality and ensure high conversion rates over sheer volume.</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="final-cta observe-fade">
+            <h2>Ready to land your dream job?</h2>
+            <p>Join thousands of engineers who automated their search.</p>
+            <button class="btn btn-primary btn-lg glow-btn btn-shimmer">Join the Beta</button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="pathlight_logo.png" alt="Pathlight" class="footer-logo">
+                <p>The AI Agent for your career.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-column">
+                    <h4>Product</h4>
+                    <a href="#">Features</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Security</a>
+                </div>
+                <div class="link-column">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="link-column">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

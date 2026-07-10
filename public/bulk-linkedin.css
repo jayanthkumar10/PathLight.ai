@@ -1,0 +1,550 @@
+   BULK LINKEDIN APPLY
+=========================================== */
+.bulk-linkedin-page {
+    padding: 0 var(--space-8) var(--space-8);
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hero Section */
+.bulk-linkedin-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
+    perspective: 1000px;
+}
+.bulk-linkedin-title {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.bulk-linkedin-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin-bottom: 0.75rem;
+}
+.bulk-linkedin-status-pills {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.bulk-linkedin-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    backdrop-filter: blur(8px);
+}
+.bulk-linkedin-pill.active {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
+    box-shadow: 0 0 16px rgba(139, 92, 246, 0.1);
+}
+.bulk-linkedin-pill .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* Centered Setup Layout */
+.bulk-linkedin-setup-container {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Premium Cards */
+.bulk-linkedin-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-spring);
+}
+.bulk-linkedin-card:hover {
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+}
+.bulk-linkedin-card-header {
+    margin-bottom: 1.5rem;
+}
+.bulk-linkedin-card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Configuration Forms */
+.bulk-linkedin-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 768px) {
+    .bulk-linkedin-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.bulk-linkedin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.bulk-linkedin-label {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+.bulk-linkedin-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.bulk-linkedin-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-tertiary);
+    pointer-events: none;
+}
+.bulk-linkedin-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0 var(--space-4) 0 var(--space-12);
+    height: 48px;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-family: var(--font-ui);
+    transition: all 0.3s var(--ease-apple);
+    outline: none;
+}
+.bulk-linkedin-input:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+.bulk-linkedin-input:focus {
+    border-color: var(--accent-primary);
+    background: rgba(139, 92, 246, 0.02);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+/* Chips */
+.bulk-linkedin-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.bulk-linkedin-chip {
+    padding: 0.625rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s var(--ease-apple);
+}
+.bulk-linkedin-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+.bulk-linkedin-chip.active {
+    background: var(--text-primary);
+    color: var(--bg-base);
+    border-color: transparent;
+}
+
+/* Stepper */
+.bulk-linkedin-stepper {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 0.25rem;
+}
+.bulk-linkedin-stepper-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none;
+    color: var(--text-secondary); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s;
+}
+.bulk-linkedin-stepper-btn:hover {
+    background: rgba(255, 255, 255, 0.08); color: var(--text-primary);
+}
+.bulk-linkedin-stepper-input {
+    width: 60px; text-align: center;
+    background: transparent; border: none; outline: none;
+    color: var(--text-primary); font-size: 1.125rem; font-weight: 600;
+    -moz-appearance: textfield;
+}
+.bulk-linkedin-stepper-input::-webkit-outer-spin-button, .bulk-linkedin-stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Primary CTA */
+.bulk-linkedin-cta-wrapper {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: flex-end;
+}
+.bulk-linkedin-btn-premium {
+    width: auto;
+    padding: 0 3rem;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.bulk-linkedin-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin-bottom: 0.75rem;
+}
+.bulk-linkedin-status-pills {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.bulk-linkedin-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    backdrop-filter: blur(8px);
+}
+.bulk-linkedin-pill.active {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
+    box-shadow: 0 0 16px rgba(139, 92, 246, 0.1);
+}
+.bulk-linkedin-pill .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* Centered Setup Layout */
+.bulk-linkedin-setup-container {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Premium Cards */
+.bulk-linkedin-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-spring);
+}
+.bulk-linkedin-card:hover {
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+}
+.bulk-linkedin-card-header {
+    margin-bottom: 1.5rem;
+}
+.bulk-linkedin-card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Configuration Forms */
+.bulk-linkedin-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 768px) {
+    .bulk-linkedin-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.bulk-linkedin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.bulk-linkedin-label {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+.bulk-linkedin-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.bulk-linkedin-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-tertiary);
+    pointer-events: none;
+}
+.bulk-linkedin-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0 var(--space-4) 0 var(--space-12);
+    height: 48px;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-family: var(--font-ui);
+    transition: all 0.3s var(--ease-apple);
+    outline: none;
+}
+.bulk-linkedin-input:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+.bulk-linkedin-input:focus {
+    border-color: var(--accent-primary);
+    background: rgba(139, 92, 246, 0.02);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+/* Chips */
+.bulk-linkedin-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.bulk-linkedin-chip {
+    padding: 0.625rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s var(--ease-apple);
+}
+.bulk-linkedin-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+.bulk-linkedin-chip.active {
+    background: var(--text-primary);
+    color: var(--bg-base);
+    border-color: transparent;
+}
+
+/* Stepper */
+.bulk-linkedin-stepper {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 0.25rem;
+}
+.bulk-linkedin-stepper-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none;
+    color: var(--text-secondary); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s;
+}
+.bulk-linkedin-stepper-btn:hover {
+    background: rgba(255, 255, 255, 0.08); color: var(--text-primary);
+}
+.bulk-linkedin-stepper-input {
+    width: 60px; text-align: center;
+    background: transparent; border: none; outline: none;
+    color: var(--text-primary); font-size: 1.125rem; font-weight: 600;
+    -moz-appearance: textfield;
+}
+.bulk-linkedin-stepper-input::-webkit-outer-spin-button, .bulk-linkedin-stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Primary CTA */
+.bulk-linkedin-cta-wrapper {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: flex-end;
+}
+.bulk-linkedin-btn-premium {
+    width: auto;
+    padding: 0 3rem;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #a78bfa 100%);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s var(--ease-apple);
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.bulk-linkedin-btn-premium::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 3s infinite;
+}
+.bulk-linkedin-btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.bulk-linkedin-btn-premium:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* Custom Dropdown (Matches Profile Dropdown Design) */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+.custom-select-trigger {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0 var(--space-4) 0 var(--space-12);
+    height: 48px;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-family: var(--font-ui);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-apple);
+}
+.custom-select-trigger:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+.custom-select-wrapper.open .custom-select-trigger {
+    border-color: var(--accent-primary);
+    background: rgba(139, 92, 246, 0.02);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+.custom-select-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background: rgba(18, 18, 20, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    padding: 8px 0;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.custom-select-wrapper.open .custom-select-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.custom-select-group {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-top: 4px;
+}
+.custom-select-option {
+    padding: 10px 16px;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.custom-select-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+.custom-select-option.selected {
+    color: var(--accent-primary);
+    background: rgba(139, 92, 246, 0.08);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .bulk-linkedin-page {
+        padding: 0 1rem 1rem;
+    }
+    .bulk-linkedin-card {
+        padding: var(--space-6);
+    }
+    .bulk-linkedin-title {
+        font-size: 2rem;
+    }
+    .bulk-linkedin-btn-premium {
+        width: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+.animate-fade {
+    animation: fadeIn 0.3s ease-out;
+}
+

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathlight Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="topbar.css">
+    <link rel="stylesheet" href="profile.css">
+        <script>
+        if (localStorage.getItem('pathlight-sidebar-collapsed') === 'true') {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
+    </script>
+</head>
+<body class="dark-theme">
+<div class="dashboard-body">
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <!-- Cinematic Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+
+
+    <!-- Dashboard App Layout -->
+    <div class="app-layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="step-1-target">
+            <div class="sidebar-header flex items-center justify-between mb-8">
+                <img src="pathlight_logo.png" alt="Pathlight Logo" class="sidebar-logo" style="margin-bottom: 0;">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard.html" class="nav-item" data-tooltip="Home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" data-tooltip="Career Hub">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span>Career Hub</span>
+                </a>
+                <a href="/tailored-resumes.html" class="nav-item" id="step-2-target" data-tooltip="Applications">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Applications</span>
+                </a>
+                <a href="/single-tailor.html" class="nav-item" data-tooltip="Tailor Resume">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Tailor Resume</span>
+                </a>
+                <a href="#" class="nav-item" data-tooltip="Interview Prep">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <span>Interview Prep</span>
+                </a>
+                <a href="#" class="nav-item" id="step-4-target" data-tooltip="AI Assistant">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    <span>AI Assistant</span>
+                </a>
+                <a href="#" class="nav-item" data-tooltip="Insights">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <span>Insights</span>
+                </a>
+                <a href="/profile.html" class="nav-item active" data-tooltip="Profile">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile</span>
+                </a>
+                <a href="/bulk-linkedin.html" class="nav-item" id="nav-linkedin-bulk" data-tooltip="Bulk LinkedIn Apply">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    <span>Bulk LinkedIn Apply</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" data-tooltip="Settings
+                ">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings
+                </span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+    <header class="topbar">
+                <div class="topbar-left flex items-center gap-4">
+                    <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open Menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                </div>
+                                <div class="topbar-right">
+                    <!-- Global Search -->
+                    <div class="search-bar" id="global-search-container">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="global-search-input" placeholder="Search jobs, resumes, recruiters, companies..." aria-label="Search" role="searchbox">
+                        
+                    </div>
+                    <!-- Mobile Search Toggle -->
+                    <button class="mobile-search-toggle" id="mobile-search-toggle" aria-label="Open Search">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    
+                    <div class="notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </div>
+
+                    <!-- Profile Dropdown Menu Trigger -->
+                    <div class="profile-avatar dropdown-trigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" id="profile-menu-trigger">
+                        <div class="avatar-circle">U</div>
+                        
+                        <!-- Profile Dropdown Menu -->
+                        <div class="profile-dropdown" id="profile-dropdown" role="menu">
+                            <div class="dropdown-header">
+                                <span class="dropdown-name">User Account</span>
+                                <span class="dropdown-email">user@example.com</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="/profile.html" class="dropdown-item" role="menuitem">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item" role="menuitem">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item text-danger" id="sign-out-btn" role="menuitem">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+    <div class="profile-container view-mode" id="profile-container">
+        
+        <!-- Header Actions -->
+        <div class="profile-page-header">
+            <div class="header-titles">
+                <h1>Profile</h1>
+                <p>Manage the information Pathlight AI uses to tailor your applications.</p>
+            </div>
+            <button class="btn-global-edit" id="btn-global-edit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Edit Profile
+            </button>
+        </div>
+
+        <!-- 1. Master Resume (Hero) -->
+        <div class="profile-section resume-hero">
+            <div class="section-header">
+                <h2>Master Resume</h2>
+                <p>The foundation of your AI Career Agent.</p>
+            </div>
+            <div class="resume-dropzone" id="resume-dropzone">
+                <div class="resume-hero-content">
+                    <div class="resume-icon-large">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <div class="resume-hero-details">
+                        <h3>Pathlight_User_Resume_2026.pdf</h3>
+                        <p>Uploaded 3 days ago &bull; 1.2 MB</p>
+                    </div>
+                    
+                    <div class="resume-extracted-data">
+                        <div class="extracted-item">
+                            <span class="ext-label">Experience</span>
+                            <span class="ext-val">5 Years</span>
+                        </div>
+                        <div class="extracted-item">
+                            <span class="ext-label">Projects</span>
+                            <span class="ext-val">4 Detected</span>
+                        </div>
+                        <div class="extracted-item">
+                            <span class="ext-label">Skills</span>
+                            <span class="ext-val">12 Detected</span>
+                        </div>
+                        <div class="extracted-item">
+                            <span class="ext-label">Education</span>
+                            <span class="ext-val">B.S. Computer Science</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="resume-hero-actions">
+                    <button class="btn-hero-action"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Preview</button>
+                    <button class="btn-hero-action"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download</button>
+                    <button class="btn-hero-action"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Replace</button>
+                    <button class="btn-hero-action danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Unified Professional Profile -->
+        <div class="profile-section unified-profile">
+            <div class="section-header">
+                <h2>Professional Profile</h2>
+                <p>Onboarding preferences used to inform your AI applications.</p>
+            </div>
+            
+            <div class="unified-card">
+                
+                <!-- Personal Subset -->
+                <div class="form-subset">
+                    <h3>Personal Identity</h3>
+                    <div class="form-grid">
+                        <div class="field-item">
+                            <label>Full Name</label>
+                            <div class="field-read">Pathlight User</div>
+                            <input type="text" class="field-write" value="Pathlight User">
+                        </div>
+                        <div class="field-item">
+                            <label>Email Address</label>
+                            <div class="field-read">user@pathlight.ai</div>
+                            <input type="email" class="field-write" value="user@pathlight.ai">
+                        </div>
+                        <div class="field-item">
+                            <label>Current City</label>
+                            <div class="field-read">San Francisco, CA</div>
+                            <input type="text" class="field-write" value="San Francisco, CA">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subset-divider"></div>
+
+                <!-- Professional Subset -->
+                <div class="form-subset">
+                    <h3>Career Targets & Skills</h3>
+                    <div class="form-grid">
+                        <div class="field-item">
+                            <label>Target Role</label>
+                            <div class="field-read">Senior Frontend Engineer</div>
+                            <input type="text" class="field-write" value="Senior Frontend Engineer">
+                        </div>
+                        <div class="field-item">
+                            <label>Total Experience</label>
+                            <div class="field-read">5 Years</div>
+                            <input type="number" class="field-write" value="5" step="0.5">
+                        </div>
+                        <div class="field-item span-2">
+                            <label>Core Skills</label>
+                            <div class="field-read pills">
+                                <span>React</span><span>TypeScript</span><span>Node.js</span><span>Next.js</span>
+                            </div>
+                            <input type="text" class="field-write" value="React, TypeScript, Node.js, Next.js">
+                        </div>
+                        <div class="field-item">
+                            <label>Current CTC (LPA)</label>
+                            <div class="field-read">24.0</div>
+                            <input type="number" class="field-write" value="24.0" step="0.1">
+                        </div>
+                        <div class="field-item">
+                            <label>Expected CTC (LPA)</label>
+                            <div class="field-read">32.0</div>
+                            <input type="number" class="field-write" value="32.0" step="0.1">
+                        </div>
+                        <div class="field-item">
+                            <label>Notice Period</label>
+                            <div class="field-read">60 Days</div>
+                            <select class="field-write">
+                                <option value="Immediate">Immediate Joiner</option>
+                                <option value="15 Days">15 Days</option>
+                                <option value="30 Days">30 Days</option>
+                                <option value="60 Days" selected>60 Days</option>
+                                <option value="90 Days">90 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subset-divider"></div>
+
+                <!-- Preferences Subset -->
+                <div class="form-subset">
+                    <h3>Work Preferences</h3>
+                    <div class="form-grid">
+                        <div class="field-item">
+                            <label>Preferred Work Type</label>
+                            <div class="field-read">Remote</div>
+                            <select class="field-write">
+                                <option value="Remote" selected>Remote</option>
+                                <option value="Hybrid">Hybrid</option>
+                                <option value="Office">Office</option>
+                            </select>
+                        </div>
+                        <div class="field-item">
+                            <label>Willing to Relocate</label>
+                            <div class="field-read">Yes</div>
+                            <select class="field-write">
+                                <option value="Yes" selected>Yes, willing to relocate</option>
+                                <option value="No">No, prefer current city</option>
+                                <option value="Remote">Remote only</option>
+                            </select>
+                        </div>
+                        <div class="field-item">
+                            <label>Work Authorization</label>
+                            <div class="field-read">Indian Citizen</div>
+                            <select class="field-write">
+                                <option value="Indian Citizen" selected>Indian Citizen</option>
+                                <option value="OCI">OCI / PIO</option>
+                                <option value="Other">Other Visa</option>
+                            </select>
+                        </div>
+                        <div class="field-item span-2">
+                            <label>Preferred Companies</label>
+                            <div class="field-read pills">
+                                <span>Stripe</span><span>Vercel</span><span>OpenAI</span>
+                            </div>
+                            <input type="text" class="field-write" value="Stripe, Vercel, OpenAI">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 3. AI Readiness -->
+        <div class="profile-section ai-readiness">
+            <div class="section-header">
+                <h2>AI Readiness</h2>
+                <p>Your score determines how effectively the AI can parse and tailor your applications.</p>
+            </div>
+            <div class="readiness-card">
+                <div class="readiness-score-block">
+                    <div class="score-circle">
+                        <svg viewBox="0 0 100 100" class="circular-progress">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="meter" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="85"></circle>
+                        </svg>
+                        <span class="score-text">70%</span>
+                    </div>
+                    <div class="score-context">
+                        <h3>Good Standing</h3>
+                        <p>Your agent has enough context to generate high-quality resumes, but providing more history will increase tailoring accuracy.</p>
+                    </div>
+                </div>
+
+                <div class="readiness-checklist">
+                    <div class="checklist-item done">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Master Resume Uploaded</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Experience Extracted</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Core Skills Defined</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Target Role & Preferences Configured</span>
+                    </div>
+                    <div class="checklist-item missing">
+                        <div class="missing-circle"></div>
+                        <span>Education History Missing</span>
+                    </div>
+                    <div class="checklist-item missing">
+                        <div class="missing-circle"></div>
+                        <span>LinkedIn Profile Disconnected</span>
+                    </div>
+                    <div class="checklist-item missing">
+                        <div class="missing-circle"></div>
+                        <span>Projects Not Detected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Danger Zone -->
+        <div class="profile-section danger-zone">
+            <div class="section-header">
+                <h2>Danger Zone</h2>
+                <p>Irreversible and destructive actions.</p>
+            </div>
+            <div class="danger-card">
+                <div class="danger-row">
+                    <div class="danger-info">
+                        <h3>Delete Account</h3>
+                        <p>Permanently delete your account and all generated tailored resumes. This action cannot be undone.</p>
+                    </div>
+                    <button class="btn-danger">Delete Account</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sticky Edit Actions Bar (Hidden by default) -->
+    <div class="sticky-edit-bar" id="sticky-edit-bar">
+        <div class="edit-bar-content">
+            <span class="edit-status">Unsaved Changes</span>
+            <div class="edit-actions">
+                <button class="btn-bar-cancel" id="btn-global-cancel">Cancel</button>
+                <button class="btn-bar-save" id="btn-global-save">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+</main>
+    </div>
+</div>
+<script src="dashboard.js?v=2"></script>
+<!-- Mobile Search Modal -->
+<div class="mobile-search-modal" id="mobile-search-modal">
+    <div class="mobile-search-modal-header">
+        <svg class="mobile-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="mobile-search-input" placeholder="Search Pathlight..." aria-label="Search">
+        <button class="mobile-search-close" id="mobile-search-close">Cancel</button>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

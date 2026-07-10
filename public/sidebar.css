@@ -1,0 +1,212 @@
+/* --- Sidebar Container --- */
+.sidebar {
+    background: var(--bg-card);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    transition: width 0.25s ease-in-out, padding 0.25s ease-in-out;
+    z-index: 50;
+}
+
+html.sidebar-collapsed .sidebar {
+    padding: 2rem 0.75rem;
+}
+
+/* --- Header & Logo --- */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    min-height: 32px;
+}
+
+html.sidebar-collapsed .sidebar-header, .sidebar-collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.sidebar-logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+html.sidebar-collapsed .sidebar-logo, .sidebar-collapsed .sidebar-logo {
+    display: none;
+}
+
+/* --- Navigation Items --- */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+    font-weight: 500;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nav-item svg {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+html.sidebar-collapsed .nav-item {
+    padding: 0.75rem;
+    justify-content: center;
+}
+
+html.sidebar-collapsed .nav-item span {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary-color);
+}
+
+.nav-item:hover svg, .nav-item.active svg {
+    color: var(--primary-color);
+}
+
+/* --- Tooltips for Collapsed State --- */
+html.sidebar-collapsed .nav-item:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: fadeInTooltip 0.2s ease forwards 0.1s;
+}
+
+@keyframes fadeInTooltip {
+    to { opacity: 1; }
+}
+
+/* --- Toggle Buttons --- */
+.sidebar-toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-toggle-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-menu-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: none;
+}
+
+.mobile-menu-btn:hover {
+    color: var(--text-primary);
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+/* --- Mobile Sidebar / Drawer --- */
+@media (max-width: 768px) {
+    html.sidebar-collapsed .app-layout, .app-layout.sidebar-collapsed, .app-layout { grid-template-columns: 1fr; display: flex; flex-direction: column; }
+    
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100vh;
+        width: 280px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        box-shadow: none;
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    }
+    
+    .sidebar.mobile-open {
+        left: 0;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(2px);
+    }
+    
+    .sidebar-overlay.mobile-open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    /* Reset collapsed styles for mobile drawer */
+    html.sidebar-collapsed .sidebar-logo, .sidebar-collapsed .sidebar-logo {
+        display: block;
+    }
+    html.sidebar-collapsed .nav-item, .sidebar-collapsed .nav-item {
+        justify-content: flex-start;
+        padding: 0.75rem 1rem;
+    }
+    html.sidebar-collapsed .nav-item, .sidebar-collapsed .nav-item span {
+        position: static;
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .sidebar-toggle-btn {
+        display: none;
+    }
+}

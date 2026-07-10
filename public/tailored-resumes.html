@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications | Pathlight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="topbar.css">
+    <link rel="stylesheet" href="tailored-resumes.css">
+    <script>
+        if (localStorage.getItem('pathlight-sidebar-collapsed') === 'true') {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
+    </script>
+</head>
+<body class="dark-theme">
+<div class="dashboard-body">
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <!-- Cinematic Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Dashboard App Layout -->
+    <div class="app-layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="step-1-target">
+            <div class="sidebar-header flex items-center justify-between mb-8">
+                <img src="pathlight_logo.png" alt="Pathlight Logo" class="sidebar-logo" style="margin-bottom: 0;">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard.html" class="nav-item" data-tooltip="Home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" data-tooltip="Career Hub">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span>Career Hub</span>
+                </a>
+
+                <a href="/tailored-resumes.html" class="nav-item active" id="step-2-target" data-tooltip="Applications">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Applications</span>
+                </a>
+                <a href="/single-tailor.html" class="nav-item" data-tooltip="Tailor Resume">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Tailor Resume</span>
+                </a>
+                <a href="#" class="nav-item" data-tooltip="Interview Prep">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <span>Interview Prep</span>
+                </a>
+                <a href="#" class="nav-item" id="step-4-target" data-tooltip="AI Assistant">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    <span>AI Assistant</span>
+                </a>
+                <a href="#" class="nav-item" data-tooltip="Insights">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <span>Insights</span>
+                </a>
+                <a href="/profile.html" class="nav-item" data-tooltip="Profile">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile</span>
+                </a>
+                <a href="/bulk-linkedin.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    <span>Bulk LinkedIn Apply</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" data-tooltip="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left flex items-center gap-4">
+                    <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Open Menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                </div>
+                                <div class="topbar-right">
+                    <!-- Global Search -->
+                    <div class="search-bar" id="global-search-container">
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="global-search-input" placeholder="Search jobs, resumes, recruiters, companies..." aria-label="Search" role="searchbox">
+                        
+                    </div>
+                    <!-- Mobile Search Toggle -->
+                    <button class="mobile-search-toggle" id="mobile-search-toggle" aria-label="Open Search">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    
+                    <div class="notifications">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </div>
+
+                    <!-- Profile Dropdown Menu Trigger -->
+                    <div class="profile-avatar dropdown-trigger" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" id="profile-menu-trigger">
+                        <div class="avatar-circle">U</div>
+                        
+                        <!-- Profile Dropdown Menu -->
+                        <div class="profile-dropdown" id="profile-dropdown" role="menu">
+                            <div class="dropdown-header">
+                                <span class="dropdown-name">User Account</span>
+                                <span class="dropdown-email">user@example.com</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="/profile.html" class="dropdown-item" role="menuitem">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item" role="menuitem">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item text-danger" id="sign-out-btn" role="menuitem">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Bulk LinkedIn Apply View -->
+            <div class="dashboard-content">
+    <div id="view-tailored-resumes" class="dashboard-view view-active">
+        <div class="tailored-resumes-page">
+            
+            <!-- Page Header -->
+            <header class="tr-header">
+                <div class="tr-header-left">
+                    <h1 class="tr-title">Applications</h1>
+                    <p class="tr-subtitle">Track every job application from resume generation to final outcome.</p>
+                </div>
+                <div class="tr-header-right">
+                    <div class="tr-search-box">
+                        <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="tr-search-input" placeholder="Search company, role or resume..." aria-label="Search tailored resumes">
+                    </div>
+                    <div class="tr-filters">
+                        <div class="tr-more-wrapper">
+                            <button class="tr-btn-outline" id="tr-filter-btn">
+                                <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                                Filter: <span id="current-filter-label" style="margin-left:4px; font-weight:600;">All</span>
+                            </button>
+                            <div class="tr-more-menu" id="filter-dropdown" style="width: 160px; right: 0;">
+                                <button class="tr-more-item filter-opt" data-val="All">All</button>
+                                <button class="tr-more-item filter-opt" data-val="Ready to Apply">Ready to Apply</button>
+                                <button class="tr-more-item filter-opt" data-val="Applied">Applied</button>
+                                <button class="tr-more-item filter-opt" data-val="Interview">Interview</button>
+                                <button class="tr-more-item filter-opt" data-val="Offer">Offer</button>
+                                <button class="tr-more-item filter-opt" data-val="Unmatched">Unmatched</button>
+                            </div>
+                        </div>
+                        <div class="tr-more-wrapper">
+                            <button class="tr-btn-outline" id="tr-sort-btn">
+                                <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                Sort
+                            </button>
+                            <div class="tr-more-menu" id="sort-dropdown" style="width: 180px; right: 0;">
+                                <button class="tr-more-item sort-opt" data-val="date-desc">Newest First</button>
+                                <button class="tr-more-item sort-opt" data-val="date-asc">Oldest First</button>
+                                <button class="tr-more-item sort-opt" data-val="company-asc">Company (A-Z)</button>
+                                <button class="tr-more-item sort-opt" data-val="status">Status</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Statistics Cards -->
+            <div class="tr-stats-grid">
+                <div class="tr-stat-card">
+                    <span class="tr-stat-label">Total Applications</span>
+                    <span class="tr-stat-value" id="stat-total">0</span>
+                </div>
+                <div class="tr-stat-card">
+                    <span class="tr-stat-label">Ready to Apply</span>
+                    <span class="tr-stat-value text-primary" id="stat-ready">0</span>
+                </div>
+                <div class="tr-stat-card">
+                    <span class="tr-stat-label">Applied</span>
+                    <span class="tr-stat-value text-applied" id="stat-applied">0</span>
+                </div>
+                <div class="tr-stat-card">
+                    <span class="tr-stat-label">Interviewing</span>
+                    <span class="tr-stat-value text-warning" id="stat-interviewing">0</span>
+                </div>
+                <div class="tr-stat-card">
+                    <span class="tr-stat-label">Offers</span>
+                    <span class="tr-stat-value text-success" id="stat-offers">0</span>
+                </div>
+                <div class="tr-stat-card">
+                    <span class="tr-stat-label">Unmatched</span>
+                    <span class="tr-stat-value text-danger" id="stat-rejected">0</span>
+                </div>
+            </div>
+
+            <!-- Main Data Table Container -->
+            <div class="tr-table-container">
+                <table class="tr-table">
+                    <thead>
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Company</th>
+                            <th>Role</th>
+                            <th>Location</th>
+                            <th>Resume</th>
+                            <th>Apply Link</th>
+                            <th>Status</th>
+                            <th style="width:12%;">GENERATED AT</th>
+                            <th class="tr-actions-col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tr-table-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+                
+                <!-- Empty State -->
+                <div class="tr-empty-state" id="tr-empty-state" style="display: none;">
+                    <svg class="tr-empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <h3>No Applications Yet</h3>
+                    <p>Generate applications from Bulk LinkedIn Apply</p>
+                    <a href="/bulk-linkedin.html" class="tr-btn-primary mt-4">Go to Bulk LinkedIn Apply</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</main>
+    </div>
+</div>
+<script src="dashboard.js?v=2"></script>
+<script src="bulk-linkedin.js?v=2"></script>
+<!-- Mobile Search Modal -->
+<div class="mobile-search-modal" id="mobile-search-modal">
+    <div class="mobile-search-modal-header">
+        <svg class="mobile-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="mobile-search-input" placeholder="Search Pathlight..." aria-label="Search">
+        <button class="mobile-search-close" id="mobile-search-close">Cancel</button>
+    </div>
+</div>
+<script src="tailored-resumes.js?v=2"></script></body>
+</html>
+
+
+
+
+
+
+
