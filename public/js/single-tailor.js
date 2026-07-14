@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Get model from hidden input
             const modelSelect = document.getElementById('model-select');
-            const model = modelSelect ? modelSelect.value : 'gemini-2.5-flash';
+            const model = modelSelect ? modelSelect.value : 'gemini-1.5-flash';
 
             const requestData = {
                 job_description: jdText,

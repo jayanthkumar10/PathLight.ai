@@ -12,12 +12,14 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 from backend.database import get_db
-from backend.schemas.job import TailoringJobCreate, TailoringJobResponse, ApplicationResponse, SingleTailorCreate
+from backend.schemas.job import TailoringJobCreate, TailoringJobResponse, ApplicationResponse, SingleTailorCreate, ManualApplicationCreate
 from backend.repositories.job_repo import tailoring_job_repo, application_repo
 from backend.services.pipeline import run_tailoring_pipeline, run_single_tailoring_pipeline
+from backend.models.resume import MasterResume
+from backend.models.core import MasterProfile
 
 # Unified Routers
-from backend.routers import auth, dashboard, onboarding, linkedin, resume
+from backend.routers import auth, dashboard, onboarding, linkedin, resume, studio
 
 logging.basicConfig(
     level=logging.INFO,
@@ -50,6 +52,7 @@ app.include_router(dashboard.router)
 app.include_router(onboarding.router)
 app.include_router(linkedin.router)
 app.include_router(resume.router)
+app.include_router(studio.router)
 
 
 # ---------------------------------------------------------------------------
@@ -113,6 +116,42 @@ def get_tailoring_status(job_id: str, db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 # Applications (ATS Engine)
 # ---------------------------------------------------------------------------
+@app.post("/api/applications/manual", response_model=ApplicationResponse)
+def add_manual_application(app_in: ManualApplicationCreate, db: Session = Depends(get_db)):
+    """Manually add an application. Binds to a dummy tailoring job."""
+    from backend.models.job import TailoringJob, Application
+    from backend.schemas.job import TailoringJobCreate
+    import uuid
+    
+    dummy_job_id = "manual_entry_job_001"
+    job = db.query(TailoringJob).filter(TailoringJob.id == dummy_job_id).first()
+    if not job:
+        job = TailoringJob(
+            id=dummy_job_id,
+            status="completed",
+            selected_model="manual",
+            target_role="Manual Entries",
+            location="Various",
+            requested_jobs=0
+        )
+        db.add(job)
+        db.commit()
+        db.refresh(job)
+        
+    new_app = Application(
+        id=str(uuid.uuid4()),
+        tailoring_job_id=dummy_job_id,
+        job_title=app_in.job_title,
+        company=app_in.company,
+        location=app_in.location,
+        apply_link=app_in.apply_link,
+        application_status=app_in.application_status or 'Applied'
+    )
+    db.add(new_app)
+    db.commit()
+    db.refresh(new_app)
+    return new_app
+
 @app.get("/api/applications", response_model=list[ApplicationResponse])
 def get_applications(db: Session = Depends(get_db)):
     """Fetch all generated applications."""
@@ -174,6 +213,48 @@ def download_resume_pdf(app_id: str, db: Session = Depends(get_db)):
     )
 
 
+@app.get("/api/applications/{app_id}/compare")
+def compare_resume(
+    app_id: str, 
+    db: Session = Depends(get_db)
+):
+    """Fetch generated HTML and original parsed text for diffing."""
+    app_obj = application_repo.get(db, id=app_id)
+    if not app_obj:
+        raise HTTPException(status_code=404, detail="Application not found")
+    if not app_obj.generated_html:
+        raise HTTPException(status_code=404, detail="No tailored HTML found")
+
+    # Compare current dynamic MasterProfile
+    from backend.models.core import MasterProfile
+    master_profile = db.query(MasterProfile).first()
+    if master_profile:
+        # Construct plain text for the diff comparison
+        original_text = f"Contact Info:\n{master_profile.contactInfo}\n\n"
+        original_text += f"Target Titles:\n{master_profile.targetTitles}\n\n"
+        original_text += f"Work Experience:\n{master_profile.workExperience}\n\n"
+        original_text += f"Projects:\n{master_profile.projects}\n\n"
+        original_text += f"Education:\n{master_profile.education}\n\n"
+        original_text += f"Skills:\n{master_profile.skills}\n\n"
+        original_text += f"Achievements:\n{master_profile.achievements}"
+        
+        return {
+            "original_text": original_text,
+            "generated_html": app_obj.generated_html
+        }
+    
+    # Fallback to legacy MasterResume
+    master = db.query(MasterResume).filter(MasterResume.user_id == app_obj.userId).order_by(MasterResume.created_at.desc()).first()
+    
+    if not master or not master.parsed_text:
+        raise HTTPException(status_code=404, detail="No active master resume found to compare against")
+
+    return {
+        "original_text": master.parsed_text,
+        "generated_html": app_obj.generated_html
+    }
+
+
 @app.delete("/api/applications/{app_id}")
 def delete_application(app_id: str, db: Session = Depends(get_db)):
     """Delete an application and its associated PDF."""
@@ -211,23 +292,44 @@ def read_page_html(page: str):
         return FileResponse(file_path)
     raise HTTPException(status_code=404, detail="Page not found")
 
-@app.get("/{file}.css")
-def read_css(file: str):
-    file_path = os.path.join(frontend_dir, f"{file}.css")
+@app.get("/css/{file}.css")
+def read_css_new(file: str):
+    file_path = os.path.join(frontend_dir, "css", f"{file}.css")
     if os.path.exists(file_path):
         return FileResponse(file_path)
     raise HTTPException(status_code=404, detail="File not found")
-    
+
+@app.get("/{file}.css")
+def read_css_fallback(file: str):
+    file_path = os.path.join(frontend_dir, "css", f"{file}.css")
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    raise HTTPException(status_code=404, detail="File not found")
+
+@app.get("/js/{file}.js")
+def read_js_new(file: str):
+    file_path = os.path.join(frontend_dir, "js", f"{file}.js")
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    raise HTTPException(status_code=404, detail="File not found")
+
 @app.get("/{file}.js")
-def read_js(file: str):
-    file_path = os.path.join(frontend_dir, f"{file}.js")
+def read_js_fallback(file: str):
+    file_path = os.path.join(frontend_dir, "js", f"{file}.js")
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    raise HTTPException(status_code=404, detail="File not found")
+
+@app.get("/assets/{file}.png")
+def read_png_new(file: str):
+    file_path = os.path.join(frontend_dir, "assets", f"{file}.png")
     if os.path.exists(file_path):
         return FileResponse(file_path)
     raise HTTPException(status_code=404, detail="File not found")
 
 @app.get("/{file}.png")
-def read_png(file: str):
-    file_path = os.path.join(frontend_dir, f"{file}.png")
+def read_png_fallback(file: str):
+    file_path = os.path.join(frontend_dir, "assets", f"{file}.png")
     if os.path.exists(file_path):
         return FileResponse(file_path)
     raise HTTPException(status_code=404, detail="File not found")

@@ -229,3 +229,182 @@ RESUME_TEMPLATE_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
+# Dynamic HTML Template Base (extracting the top header part and css from above)
+DYNAMIC_RESUME_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{name} - Resume</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0.5in 0.6in;
+        }
+        body {
+            font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+            color: #222;
+            font-size: 13.5px;
+            line-height: 1.45;
+            -webkit-font-smoothing: antialiased;
+        }
+        @media screen {
+            body {
+                background-color: #e5e7eb;
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+            }
+            .page {
+                background-color: white;
+                width: 800px;
+                max-width: 100%;
+                min-height: 1056px;
+                padding: 0.5in 0.6in;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                box-sizing: border-box;
+            }
+        }
+        @media print {
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            .page {
+                width: 100%;
+            }
+        }
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #000;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .contact-info {
+            font-size: 13px;
+            color: #444;
+        }
+        .contact-info a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        .section-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #000;
+            text-transform: uppercase;
+            border-bottom: 1.5px solid #000;
+            margin-top: 12px;
+            margin-bottom: 8px;
+            padding-bottom: 2px;
+        }
+        section {
+            margin-bottom: 12px;
+        }
+        ul {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 6px;
+            text-align: justify;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .tech-stack {
+            font-size: 12.5px;
+            color: #555;
+            font-style: italic;
+            margin-top: -3px;
+            margin-bottom: 6px;
+        }
+        .skills-list p {
+            margin: 4px 0;
+        }
+        .project-link {
+            font-size: 12.5px;
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- HEADER -->
+        <header>
+            <h1>{name}</h1>
+            <div class="subtitle">{subtitle}</div>
+            <div class="contact-info">
+                {contact_html}
+            </div>
+        </header>
+
+        <!-- PROFESSIONAL SUMMARY -->
+        {professional_summary_section}
+
+        <!-- TECHNICAL SKILLS -->
+        <section>
+            <div class="section-title">Technical Skills</div>
+            <div class="skills-list">
+                {technical_skills}
+            </div>
+        </section>
+
+        <!-- WORK EXPERIENCE -->
+        {work_experience_section}
+
+        <!-- PROJECTS -->
+        {projects_section}
+
+        <!-- EDUCATION -->
+        {education_section}
+
+        <!-- ACHIEVEMENTS -->
+        {achievements_section}
+    </div>
+</body>
+</html>
+"""
+
+MASTER_SKILLS_DICT = {
+    "Languages & Core Tech": ["Python", "SQL", "PL/SQL", "RESTful APIs", "Git"],
+    "AI & Machine Learning": ["Generative AI", "Large Language Models (LLMs)", "Agentic AI", "AI Agents", "Multi-Agent Systems", "Prompt Engineering", "Context Engineering", "Retrieval-Augmented Generation (RAG)", "Agentic RAG", "Function Calling", "Tool Calling", "Structured Outputs", "Embeddings", "Semantic Search", "Hybrid Search", "Vector Search", "Natural Language Processing (NLP)", "Machine Learning", "Deep Learning Fundamentals", "Model Evaluation", "Tokenization", "Harness Engineering"],
+    "Automation & Agentic Frameworks": ["n8n", "AI Agents", "Multi-Agent Workflows", "LangChain", "LangGraph", "Model Context Protocol (MCP)", "Prompt Templates", "Chains", "Memory Management", "Workflow Orchestration", "Prompt Flow"],
+    "LLM Providers & Models": ["Azure OpenAI Service", "OpenAI GPT Models", "Anthropic Claude", "Google Gemini", "Llama", "Mistral", "Phi", "Gemma"],
+    "Vector Databases & Knowledge Retrieval": ["Azure AI Search", "Pinecone", "ChromaDB", "FAISS"],
+    "ML & AI Libraries": ["Pandas", "NumPy", "Scikit-learn", "Hugging Face Transformers", "Hugging Face Hub", "Sentence Transformers"],
+    "Backend & Deployment": ["FastAPI", "Streamlit", "Docker", "Git", "GitHub", "GitHub Actions", "CI/CD Fundamentals", "API Integration"],
+    "Cloud & Azure AI": ["Microsoft Azure", "Azure AI Foundry", "Azure OpenAI Service", "Azure AI Search", "Azure AI Studio", "Azure Functions (Fundamentals)", "Azure Storage (Fundamentals)"],
+    "AI Evaluation, Observability & Responsible AI": ["LLM Evaluation", "Prompt Evaluation", "Hallucination Detection", "AI Guardrails", "AI Testing", "Tracing", "Logging", "Monitoring", "Prompt Injection Awareness", "Responsible AI Fundamentals"],
+    "Development Tools": ["Visual Studio Code", "Jupyter Notebook", "Postman"],
+    "Software Engineering": ["Object-Oriented Programming (OOP)", "Data Structures & Algorithms (DSA)", "Debugging", "Agile Methodologies"],
+    "Certificates": ["Prompt Engineering for developers - Deeplearning.ai", "Microsoft Certified : Azure AI Engineer Associate (AI-102)"]
+}
+
+HARDCODED_ACHIEVEMENTS = """
+                <li><span class="bold">Published Patent: "System and Method for Heart Disease Prediction Using Supervised Machine Learning Algorithms" — Indian Patent Journal;</span> engineered a unified dataset by merging multiple clinical data sources, improving data quality and achieving high model accuracy for reliable early-stage prediction.</li>
+                <li><span class="bold">Spot Award (TCS):</span> Awarded for exceptional performance in developing AI-driven solutions, contributing to automation and improved operational efficiency.</li>
+"""
+

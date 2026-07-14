@@ -28,16 +28,19 @@ function bindAIWorkspaceControls() {
 
             stepperInput.value = newVal;
             helperText.textContent = `${newVal} resumes will be generated`;
-            helperText.classList.remove('animate-fade');
-            void helperText.offsetHeight;
-            helperText.classList.add('animate-fade');
+            
+            // Premium micro-animation
+            helperText.style.display = 'inline-block';
+            helperText.style.transform = 'scale(1.05)';
+            helperText.style.color = 'var(--accent-primary)';
+            helperText.style.transition = 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            setTimeout(() => {
+                helperText.style.transform = 'scale(1)';
+                helperText.style.color = 'inherit';
+            }, 200);
 
             stepperMinus.disabled = (newVal <= MIN_VAL);
             stepperPlus.disabled  = (newVal >= MAX_VAL);
-            stepperMinus.style.opacity = (newVal <= MIN_VAL) ? '0.3' : '1';
-            stepperMinus.style.cursor  = (newVal <= MIN_VAL) ? 'not-allowed' : 'pointer';
-            stepperPlus.style.opacity  = (newVal >= MAX_VAL) ? '0.3' : '1';
-            stepperPlus.style.cursor   = (newVal >= MAX_VAL) ? 'not-allowed' : 'pointer';
         };
 
         stepperMinus.addEventListener('click', () => {
@@ -123,90 +126,114 @@ function bindAITailoringFlow() {
         const timeChip    = document.querySelector('.bulk-linkedin-chip.active');
         const stepperInput = document.getElementById('stepper-input');
         const modelSelect  = document.getElementById('model-select');
+        const confidenceInput = document.getElementById('confidence-input');
 
         const targetRole = (roleInput && roleInput.value.trim()) ? roleInput.value.trim() : 'AI Engineer';
         const location   = (locationInput && locationInput.value.trim()) ? locationInput.value.trim() : '';
-        const model      = modelSelect ? modelSelect.value : 'gemini-2.5-flash';
+        const model      = modelSelect ? modelSelect.value : 'gemini-1.5-flash';
+        const minConf    = confidenceInput ? parseInt(confidenceInput.value, 10) : 55;
 
         const requestData = {
             target_role:    targetRole,
             location:       location,
             posted_within:  timeChip ? timeChip.textContent.trim() : '24H',
             requested_jobs: stepperInput ? parseInt(stepperInput.value, 10) : 10,
-            selected_model: model
+            selected_model: model,
+            min_confidence: minConf
         };
 
         // ======================================================
-        // Build and inject Processing Modal
+        // Build and inject Immersive AI Processing HUD
         // ======================================================
         const modalHtml = `
             <div id="processing-modal" style="
                 position:fixed;top:0;left:0;width:100%;height:100%;
-                background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);
-                z-index:9999;display:flex;align-items:center;justify-content:center;
-                font-family:var(--font-ui,'Inter',sans-serif);">
+                background:rgba(5, 5, 8, 0.95);backdrop-filter:blur(20px);
+                z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+                font-family:var(--font-ui,'Inter',sans-serif);
+                animation: fadeIn 0.5s ease-out;">
+              
+              <!-- Background Ambient Glows -->
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:600px;height:600px;background:radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%);pointer-events:none;"></div>
+              
               <div style="
-                background:var(--bg-surface,#1a1a2e);padding:2.5rem;
-                border-radius:16px;border:1px solid var(--border-subtle,#333);
-                width:460px;max-width:95vw;">
-                <!-- Header -->
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
-                    <div id="modal-spinner" class="spinner" style="
-                        width:36px;height:36px;border:3px solid var(--border-subtle,#333);
-                        border-top-color:var(--accent-primary,#7c3aed);
-                        border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;"></div>
+                position:relative;
+                background:rgba(15, 15, 20, 0.7);padding:3rem;
+                border-radius:24px;border:1px solid rgba(255,255,255,0.05);
+                box-shadow: 0 24px 64px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+                width:520px;max-width:95vw;
+                display:flex;flex-direction:column;gap:2rem;">
+                
+                <!-- HUD Header -->
+                <div style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+                    <div style="position:relative;width:64px;height:64px;">
+                        <div id="modal-spinner" style="
+                            position:absolute;top:0;left:0;width:100%;height:100%;
+                            border:3px solid rgba(139, 92, 246, 0.1);
+                            border-top-color:var(--accent-primary,#7c3aed);
+                            border-radius:50%;animation:spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;"></div>
+                        <div style="
+                            position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);
+                            width:32px;height:32px;background:var(--accent-primary);
+                            border-radius:50%;filter:blur(8px);opacity:0.5;animation:pulse 2s infinite;"></div>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);z-index:2;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                    </div>
                     <div>
-                        <h2 id="modal-status" style="font-size:1.25rem;font-weight:700;margin:0 0 2px;">
-                            Preparing...</h2>
-                        <p id="modal-details" style="font-size:12px;color:var(--text-secondary,#888);margin:0;">
-                            Connecting to AI Engine</p>
+                        <h2 id="modal-status" style="font-size:1.5rem;font-weight:600;letter-spacing:-0.02em;margin:0 0 4px;color:#fff;">
+                            Initializing AI Engine</h2>
+                        <p id="modal-details" style="font-size:0.9375rem;color:var(--text-secondary,#a1a1aa);margin:0;font-family:monospace;">
+                            Establishing secure connection...</p>
+                    </div>
+                </div>
+
+                <!-- Live stats -->
+                <div id="modal-stats" style="
+                    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:16px;border-radius:16px;text-align:center;">
+                        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#666;margin-bottom:8px;">Scanned</div>
+                        <div id="stat-scanned" style="font-size:2rem;font-weight:300;color:var(--text-primary);font-family:monospace;">0</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:16px;border-radius:16px;text-align:center;position:relative;overflow:hidden;">
+                        <div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,#3b82f6,transparent);opacity:0.5;"></div>
+                        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#666;margin-bottom:8px;">Matched</div>
+                        <div id="stat-matched" style="font-size:2rem;font-weight:300;color:#3b82f6;font-family:monospace;text-shadow:0 0 16px rgba(59,130,246,0.4);">0</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:16px;border-radius:16px;text-align:center;position:relative;overflow:hidden;">
+                        <div style="position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,#10b981,transparent);opacity:0.5;"></div>
+                        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#666;margin-bottom:8px;">Generated</div>
+                        <div id="stat-generated" style="font-size:2rem;font-weight:600;color:#10b981;font-family:monospace;text-shadow:0 0 24px rgba(16,185,129,0.5);">0</div>
                     </div>
                 </div>
 
                 <!-- Stage progress -->
                 <div id="modal-stages" style="
-                    background:var(--bg-base,#111);padding:1rem;
-                    border-radius:8px;margin-bottom:1.25rem;">
-                </div>
-
-                <!-- Live stats -->
-                <div id="modal-stats" style="
-                    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-                    margin-bottom:1.5rem;">
-                    <div style="background:var(--bg-base,#111);padding:10px;border-radius:8px;text-align:center;">
-                        <div id="stat-scanned" style="font-size:1.5rem;font-weight:700;color:var(--accent-primary,#7c3aed)">0</div>
-                        <div style="font-size:10px;color:#666;margin-top:2px;">Scanned</div>
-                    </div>
-                    <div style="background:var(--bg-base,#111);padding:10px;border-radius:8px;text-align:center;">
-                        <div id="stat-matched" style="font-size:1.5rem;font-weight:700;color:#3b82f6">0</div>
-                        <div style="font-size:10px;color:#666;margin-top:2px;">Matched</div>
-                    </div>
-                    <div style="background:var(--bg-base,#111);padding:10px;border-radius:8px;text-align:center;">
-                        <div id="stat-generated" style="font-size:1.5rem;font-weight:700;color:#10b981">0</div>
-                        <div style="font-size:10px;color:#666;margin-top:2px;">Generated</div>
-                    </div>
+                    background:rgba(0,0,0,0.3);padding:1.5rem;
+                    border-radius:16px;border:1px solid rgba(255,255,255,0.03);">
                 </div>
 
                 <!-- Done button (hidden until complete) -->
                 <button id="modal-done-btn" style="
-                    display:none;width:100%;padding:12px;
-                    background:var(--accent-primary,#7c3aed);color:#fff;
-                    border:none;border-radius:8px;font-size:14px;font-weight:600;
-                    cursor:pointer;transition:opacity 0.2s;">
+                    display:none;width:100%;padding:16px;
+                    background:linear-gradient(135deg, var(--accent-primary) 0%, #5b21b6 100%);color:#fff;
+                    border:none;border-radius:12px;font-size:16px;font-weight:600;
+                    cursor:pointer;transition:all 0.3s var(--ease-apple);
+                    box-shadow: 0 8px 24px rgba(139,92,246,0.3);">
                     View Applications →
                 </button>
 
                 <!-- Error dismiss (hidden) -->
                 <button id="modal-error-btn" style="
-                    display:none;width:100%;padding:12px;
-                    background:#ef4444;color:#fff;border:none;border-radius:8px;
-                    font-size:14px;font-weight:600;cursor:pointer;">
+                    display:none;width:100%;padding:16px;
+                    background:rgba(239, 68, 68, 0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2);border-radius:12px;
+                    font-size:16px;font-weight:600;cursor:pointer;">
                     Close
                 </button>
               </div>
             </div>
             <style>
                 @keyframes spin { to { transform: rotate(360deg); } }
+                @keyframes pulse { 0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.5); } }
+                @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
             </style>`;
 
         document.body.insertAdjacentHTML('beforeend', modalHtml);

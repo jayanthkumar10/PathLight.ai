@@ -26,6 +26,7 @@ class User(Base):
     resumes = relationship("Resume", back_populates="user", cascade="all, delete-orphan")
     googleConnections = relationship("GoogleConnection", back_populates="user", cascade="all, delete-orphan")
     linkedinSearches = relationship("LinkedInSearch", back_populates="user", cascade="all, delete-orphan")
+    masterProfile = relationship("MasterProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
 
 
 class Onboarding(Base):
@@ -207,3 +208,20 @@ class LinkedInSearch(Base):
     updatedAt = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
 
     user = relationship("User", back_populates="linkedinSearches")
+
+
+class MasterProfile(Base):
+    __tablename__ = "MasterProfile"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    userId = Column(String, ForeignKey("User.id", ondelete="CASCADE"), unique=True, nullable=False)
+    contactInfo = Column(JSON, nullable=True)
+    targetTitles = Column(JSON, nullable=True)
+    workExperience = Column(JSON, nullable=True)
+    projects = Column(JSON, nullable=True)
+    education = Column(JSON, nullable=True)
+    skills = Column(JSON, nullable=True)
+    achievements = Column(JSON, nullable=True)
+    createdAt = Column(DateTime(timezone=True), server_default=func.now())
+    updatedAt = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+    user = relationship("User", back_populates="masterProfile")

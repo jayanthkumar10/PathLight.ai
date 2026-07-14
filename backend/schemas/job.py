@@ -19,10 +19,18 @@ class ApplicationBase(BaseModel):
     generation_time: Optional[float] = None
     injected_keywords: Optional[str] = None
     missing_keywords: Optional[str] = None
+    match_confidence: Optional[int] = None
     application_status: Optional[str] = 'draft'
 
 class ApplicationCreate(ApplicationBase):
     tailoring_job_id: str
+
+class ManualApplicationCreate(BaseModel):
+    company: str
+    job_title: str
+    location: Optional[str] = None
+    apply_link: Optional[str] = None
+    application_status: Optional[str] = 'Applied'
 
 class ApplicationUpdate(BaseModel):
     application_status: Optional[str] = None
@@ -43,6 +51,7 @@ class TailoringJobBase(BaseModel):
 
 class TailoringJobCreate(TailoringJobBase):
     requested_jobs: int = 10
+    min_confidence: int = 55
 
 class SingleTailorCreate(BaseModel):
     job_url: Optional[str] = None
@@ -62,6 +71,7 @@ class TailoringJobResponse(TailoringJobBase):
     id: str
     status: str
     requested_jobs: int
+    min_confidence: int = 55
     scanned_jobs: int = 0
     matched_jobs: int
     generated_resumes: int

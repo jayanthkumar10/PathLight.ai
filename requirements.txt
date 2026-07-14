@@ -22,3 +22,4 @@ apify-client
 python-jose[cryptography]
 pypdf
 python-docx
+langfuse

@@ -118,37 +118,28 @@
     letter-spacing: 0.05em;
     font-weight: 500;
 }
-.bulk-linkedin-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-.bulk-linkedin-input-icon {
-    position: absolute;
-    left: 1rem;
-    color: var(--text-tertiary);
-    pointer-events: none;
-}
 .bulk-linkedin-input {
     width: 100%;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    padding: 0 var(--space-4) 0 var(--space-12);
+    padding: 0 var(--space-4);
     height: 48px;
     color: var(--text-primary);
     font-size: 0.9375rem;
     font-family: var(--font-ui);
     transition: all 0.3s var(--ease-apple);
     outline: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 .bulk-linkedin-input:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 .bulk-linkedin-input:focus {
     border-color: var(--accent-primary);
-    background: rgba(139, 92, 246, 0.02);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    background: rgba(139, 92, 246, 0.03);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 4px rgba(139, 92, 246, 0.15);
 }
 
 /* Chips */
@@ -156,51 +147,71 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.35rem;
+    border-radius: 14px;
+    display: inline-flex;
 }
 .bulk-linkedin-chip {
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem 1.5rem;
     border-radius: 10px;
     font-size: 0.875rem;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+    background: transparent;
+    border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.2s var(--ease-apple);
+    transition: all 0.3s var(--ease-apple);
 }
 .bulk-linkedin-chip:hover {
-    background: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
 }
 .bulk-linkedin-chip.active {
-    background: var(--text-primary);
-    color: var(--bg-base);
-    border-color: transparent;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+    color: #c4b5fd;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Stepper */
+/* Premium Stepper */
+.bulk-linkedin-stepper-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 .bulk-linkedin-stepper {
     display: inline-flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 4px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
 }
 .bulk-linkedin-stepper-btn {
-    width: 36px; height: 36px;
+    width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
     background: transparent; border: none;
-    color: var(--text-secondary); border-radius: 8px;
-    cursor: pointer; transition: all 0.2s;
+    color: var(--text-secondary); border-radius: 10px;
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.bulk-linkedin-stepper-btn:hover {
+.bulk-linkedin-stepper-btn:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.08); color: var(--text-primary);
 }
+.bulk-linkedin-stepper-btn:active:not(:disabled) {
+    transform: scale(0.9);
+}
+.bulk-linkedin-stepper-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+.bulk-linkedin-stepper-value-container {
+    width: 64px; text-align: center;
+}
 .bulk-linkedin-stepper-input {
-    width: 60px; text-align: center;
+    width: 100%; text-align: center;
     background: transparent; border: none; outline: none;
-    color: var(--text-primary); font-size: 1.125rem; font-weight: 600;
+    color: var(--text-primary); font-size: 1.25rem; font-weight: 600;
     -moz-appearance: textfield;
 }
 .bulk-linkedin-stepper-input::-webkit-outer-spin-button, .bulk-linkedin-stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }

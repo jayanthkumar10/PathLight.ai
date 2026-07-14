@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applications | Pathlight</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=2">
-    <link rel="stylesheet" href="layout.css">
-    <link rel="stylesheet" href="sidebar.css">
-    <link rel="stylesheet" href="topbar.css">
-    <link rel="stylesheet" href="tailored-resumes.css">
+    <link rel="stylesheet" href="/css/style.css?v=2">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/topbar.css">
+    <link rel="stylesheet" href="/css/tailored-resumes.css?v=14">
     <script>
         if (localStorage.getItem('pathlight-sidebar-collapsed') === 'true') {
             document.documentElement.classList.add('sidebar-collapsed');
@@ -29,7 +29,7 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="step-1-target">
             <div class="sidebar-header flex items-center justify-between mb-8">
-                <img src="pathlight_logo.png" alt="Pathlight Logo" class="sidebar-logo" style="margin-bottom: 0;">
+                <img src="/assets/pathlight_logo.png" alt="Pathlight Logo" class="sidebar-logo" style="margin-bottom: 0;">
                 <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
@@ -39,9 +39,9 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     <span>Home</span>
                 </a>
-                <a href="#" class="nav-item" data-tooltip="Career Hub">
+                <a href="/resume-studio.html" class="nav-item" data-tooltip="Resume Studio">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                    <span>Career Hub</span>
+                    <span>Resume Studio</span>
                 </a>
 
                 <a href="/tailored-resumes.html" class="nav-item active" id="step-2-target" data-tooltip="Applications">
@@ -146,39 +146,15 @@
                     <h1 class="tr-title">Applications</h1>
                     <p class="tr-subtitle">Track every job application from resume generation to final outcome.</p>
                 </div>
-                <div class="tr-header-right">
+                <div class="tr-header-right" style="display: flex; gap: 16px; align-items: center;">
                     <div class="tr-search-box">
                         <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         <input type="text" id="tr-search-input" placeholder="Search company, role or resume..." aria-label="Search tailored resumes">
                     </div>
-                    <div class="tr-filters">
-                        <div class="tr-more-wrapper">
-                            <button class="tr-btn-outline" id="tr-filter-btn">
-                                <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                                Filter: <span id="current-filter-label" style="margin-left:4px; font-weight:600;">All</span>
-                            </button>
-                            <div class="tr-more-menu" id="filter-dropdown" style="width: 160px; right: 0;">
-                                <button class="tr-more-item filter-opt" data-val="All">All</button>
-                                <button class="tr-more-item filter-opt" data-val="Ready to Apply">Ready to Apply</button>
-                                <button class="tr-more-item filter-opt" data-val="Applied">Applied</button>
-                                <button class="tr-more-item filter-opt" data-val="Interview">Interview</button>
-                                <button class="tr-more-item filter-opt" data-val="Offer">Offer</button>
-                                <button class="tr-more-item filter-opt" data-val="Unmatched">Unmatched</button>
-                            </div>
-                        </div>
-                        <div class="tr-more-wrapper">
-                            <button class="tr-btn-outline" id="tr-sort-btn">
-                                <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-                                Sort
-                            </button>
-                            <div class="tr-more-menu" id="sort-dropdown" style="width: 180px; right: 0;">
-                                <button class="tr-more-item sort-opt" data-val="date-desc">Newest First</button>
-                                <button class="tr-more-item sort-opt" data-val="date-asc">Oldest First</button>
-                                <button class="tr-more-item sort-opt" data-val="company-asc">Company (A-Z)</button>
-                                <button class="tr-more-item sort-opt" data-val="status">Status</button>
-                            </div>
-                        </div>
-                    </div>
+                    <button class="tr-btn-primary" id="add-manual-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Add Application
+                    </button>
                 </div>
             </header>
 
@@ -189,8 +165,8 @@
                     <span class="tr-stat-value" id="stat-total">0</span>
                 </div>
                 <div class="tr-stat-card">
-                    <span class="tr-stat-label">Ready to Apply</span>
-                    <span class="tr-stat-value text-primary" id="stat-ready">0</span>
+                    <span class="tr-stat-label">Rejected</span>
+                    <span class="tr-stat-value text-danger" id="stat-rejected">0</span>
                 </div>
                 <div class="tr-stat-card">
                     <span class="tr-stat-label">Applied</span>
@@ -205,8 +181,46 @@
                     <span class="tr-stat-value text-success" id="stat-offers">0</span>
                 </div>
                 <div class="tr-stat-card">
-                    <span class="tr-stat-label">Unmatched</span>
-                    <span class="tr-stat-value text-danger" id="stat-rejected">0</span>
+                    <span class="tr-stat-label">HR Screening</span>
+                    <span class="tr-stat-value text-primary" id="stat-hr-screening">0</span>
+                </div>
+            </div>
+
+            <div class="tr-header-right" style="width: 100%; display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-bottom: -16px;">
+                <div class="tr-toolbar-actions">
+                    <div class="tr-filters">
+                        <div class="tr-more-wrapper">
+                            <button class="tr-btn-outline" id="tr-filter-btn">
+                                <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                                Filter: <span id="current-filter-label" style="margin-left:4px; font-weight:600;">All</span>
+                            </button>
+                            <div class="tr-more-menu" id="filter-dropdown" style="width: 160px; right: 0;">
+                                <button class="tr-more-item filter-opt active" data-val="All">All</button>
+                                <button class="tr-more-item filter-opt" data-val="Rejected">Rejected</button>
+                                <button class="tr-more-item filter-opt" data-val="Applied">Applied</button>
+                                <button class="tr-more-item filter-opt" data-val="HR Screening">HR Screening</button>
+                                <button class="tr-more-item filter-opt" data-val="OA Scheduled">OA Scheduled</button>
+                                <button class="tr-more-item filter-opt" data-val="Interview">Interview</button>
+                                <button class="tr-more-item filter-opt" data-val="Final Round">Final Round</button>
+                                <button class="tr-more-item filter-opt" data-val="Offer">Offer</button>
+                                <button class="tr-more-item filter-opt" data-val="Rejected">Rejected</button>
+                                <button class="tr-more-item filter-opt" data-val="Ghosted">Ghosted</button>
+                                <button class="tr-more-item filter-opt" data-val="Withdrawn">Withdrawn</button>
+                            </div>
+                        </div>
+                        <div class="tr-more-wrapper">
+                            <button class="tr-btn-outline" id="tr-sort-btn">
+                                <svg class="tr-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                Sort
+                            </button>
+                            <div class="tr-more-menu" id="sort-dropdown" style="width: 160px; right: 0;">
+                                <button class="tr-more-item sort-opt active" data-val="date-desc">Newest First</button>
+                                <button class="tr-more-item sort-opt" data-val="date-asc">Oldest First</button>
+                                <button class="tr-more-item sort-opt" data-val="company-asc">Company A-Z</button>
+                                <button class="tr-more-item sort-opt" data-val="status">Status</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -215,15 +229,15 @@
                 <table class="tr-table">
                     <thead>
                         <tr>
-                            <th>Sr No</th>
-                            <th>Company</th>
-                            <th>Role</th>
-                            <th>Location</th>
-                            <th>Resume</th>
-                            <th>Apply Link</th>
-                            <th>Status</th>
-                            <th style="width:12%;">GENERATED AT</th>
-                            <th class="tr-actions-col">Actions</th>
+                            <th style="width: 50px;">SR NO</th>
+                            <th>COMPANY</th>
+                            <th>ROLE</th>
+                            <th>LOCATION</th>
+                            <th style="text-align: center;">TAILORED RESUME</th>
+                            <th>APPLY LINK</th>
+                            <th>STATUS</th>
+                            <th>GENERATED AT</th>
+                            <th style="width: 50px; text-align: center;">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody id="tr-table-body">
@@ -243,11 +257,97 @@
         </div>
     </div>
 </div>
+</div>
 </main>
     </div>
 </div>
-<script src="dashboard.js?v=2"></script>
-<script src="bulk-linkedin.js?v=2"></script>
+<!-- Diff Sidebar Panel -->
+<div id="diff-sidebar" class="diff-sidebar">
+    <div class="diff-sidebar-header">
+        <div style="flex: 1;">
+            <h3 class="diff-sidebar-title" id="diff-sidebar-title">Tailored Resume</h3>
+            <p id="diff-sidebar-subtitle" style="color: rgba(255,255,255,0.6); margin: 4px 0 0; font-size: 0.875rem;">Loading...</p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button id="diff-sidebar-download" class="tr-btn-outline" style="padding: 8px 16px; font-size: 0.875rem; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; vertical-align: text-top;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download PDF
+            </button>
+            <a id="diff-sidebar-apply" href="#" target="_blank" class="tr-btn-primary" style="padding: 8px 16px; font-size: 0.875rem; display: none; text-decoration: none;">
+                Apply Job
+            </a>
+            <button id="diff-sidebar-close" class="diff-sidebar-close" aria-label="Close sidebar" style="margin-left: 8px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+    <div class="diff-sidebar-content">
+        <p class="diff-sidebar-legend"><span class="highlight-new-legend"></span> AI Injected Keywords</p>
+        <div id="diff-sidebar-body">
+            <!-- Diff HTML will be injected here -->
+        </div>
+    </div>
+</div>
+
+<!-- Manual Application Sidebar -->
+<div class="diff-sidebar" id="manual-add-sidebar">
+    <div class="diff-sidebar-header">
+        <div>
+            <h2 id="manual-sidebar-title" style="color:#fff; margin:0; font-size:18px; font-weight:600;">Add Application</h2>
+            <p style="color:#a0a0a0; font-size:13px; margin:4px 0 0 0;">Manually track an external job application.</p>
+        </div>
+        <button class="diff-sidebar-close" id="manual-sidebar-close" aria-label="Close Sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    <div class="diff-sidebar-content">
+        <form id="manual-add-form" class="manual-form">
+            <div class="form-group">
+                <label for="manual-company">Company Name <span class="required">*</span></label>
+                <input type="text" id="manual-company" name="company" placeholder="e.g. Google" required>
+            </div>
+            <div class="form-group">
+                <label for="manual-role">Job Role <span class="required">*</span></label>
+                <input type="text" id="manual-role" name="job_title" placeholder="e.g. AI Engineer" required>
+            </div>
+            <div class="form-group">
+                <label for="manual-location">Location</label>
+                <input type="text" id="manual-location" name="location" placeholder="e.g. Remote, San Francisco">
+            </div>
+            <div class="form-group">
+                <label for="manual-link">Job URL (Apply Link)</label>
+                <input type="url" id="manual-link" name="apply_link" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label for="manual-status">Application Status</label>
+                <select id="manual-status" name="application_status">
+                    <option value="Draft">Draft</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Ready to Apply">Ready to Apply</option>
+                    <option value="Applied" selected>Applied</option>
+                    <option value="HR Screening">HR Screening</option>
+                    <option value="OA Scheduled">OA Scheduled</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Final Round">Final Round</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Ghosted">Ghosted</option>
+                    <option value="Withdrawn">Withdrawn</option>
+                    <option value="Archived">Archived</option>
+                </select>
+            </div>
+            <div style="margin-top: 32px;">
+                <button type="submit" class="tr-btn-primary" id="manual-submit-btn" style="width:100%; justify-content:center;">
+                    Save Application
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- Mobile Search Modal -->
 <div class="mobile-search-modal" id="mobile-search-modal">
     <div class="mobile-search-modal-header">
@@ -256,7 +356,7 @@
         <button class="mobile-search-close" id="mobile-search-close">Cancel</button>
     </div>
 </div>
-<script src="tailored-resumes.js?v=2"></script></body>
+<script src="/js/tailored-resumes.js?v=16"></script></body>
 </html>
 
 

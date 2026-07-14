@@ -17,3 +17,15 @@ uploads/
 test_*.pdf
 temp_*
 Projects/
+
+# Logs
+*.log
+api.log
+celery.log
+
+# Node
+node_modules/
+
+# Scripts and Scratch
+scratch/
+fix_db.py

@@ -12,12 +12,12 @@ from datetime import datetime, timezone
 from backend.database import SessionLocal
 from backend.repositories.job_repo import tailoring_job_repo, application_repo
 from backend.models.resume import MasterResume
-from backend.models.job import ScrapedJob, JDIntelligenceCache, EvidenceMap as DBEvidenceMap, Application
+from backend.models.job import ScrapedJob, JDIntelligenceCache, EvidenceMap as DBEvidenceMap, Application, TailoringJob
 from backend.schemas.job import TailoringJobUpdate
 
 from backend.services.scraper.apify_client import ApifyClient
 from backend.services.engine.job_normalizer import normalize_apify_job
-from backend.services.engine.yoe_filter import passes_yoe_filter
+from backend.services.engine.suitability_filter import check_job_suitability
 from backend.services.engine.jd_intelligence import extract_jd_intelligence, extract_jd_metadata
 from backend.services.engine.resume_context import get_resume_context
 from backend.services.engine.evidence_mapper import map_evidence
@@ -79,7 +79,7 @@ async def run_single_tailoring_pipeline(job_id: str, jd_text: str, job_url: str)
         
         # Execute the single job
         success = await process_single_job(
-            db, job, raw_job_data, master_resume, resume_context, resume_generator
+            db, job, raw_job_data, master_resume, resume_context, resume_generator, bypass_yoe=True
         )
         
         if success:
@@ -98,7 +98,7 @@ async def run_single_tailoring_pipeline(job_id: str, jd_text: str, job_url: str)
     
     logger.info(f"Single Pipeline FINISHED — Job ID: {job_id}")
 
-async def process_single_job(db, tailoring_job, raw_job_data, master_resume, resume_context, resume_generator):
+async def process_single_job(db, tailoring_job, raw_job_data: dict, master_resume: MasterResume, resume_context: dict, resume_generator, bypass_yoe: bool = False) -> bool:
     """Processes one scraped job through the 14-step deterministic pipeline."""
     # Step 0: Deduplication Check
     apify_id = raw_job_data.get("id")
@@ -138,17 +138,26 @@ async def process_single_job(db, tailoring_job, raw_job_data, master_resume, res
     db.add(app)
     db.commit()
     
-    # Step 2: YOE Filter
-    candidate_yoe = resume_context.get("years_of_experience", 2)
-    passed, reason = passes_yoe_filter(norm_job, candidate_yoe)
-    if not passed:
-        logger.info(f"Skipping {norm_job.title} - YOE Filter: {reason}")
-        app.application_status = "Rejected"
-        app.missing_keywords = f"Rejected by YOE filter: {reason}"
-        db.commit()
-        return False
+    # Step 2: Suitability Filter (Bypassed if explicitly requested, like in single tailor flow)
+    if not bypass_yoe:
+        candidate_summary = resume_context.get("profile_summary", "Candidate")
+        min_conf = getattr(tailoring_job, "min_confidence", 55)
+        passed, reason, score = check_job_suitability(norm_job, candidate_summary, min_confidence=min_conf, model=tailoring_job.selected_model)
+        app.match_confidence = score
+        if not passed:
+            logger.info(f"Skipping {norm_job.title} - Suitability Filter ({score}%): {reason}")
+            app.application_status = "Rejected"
+            app.missing_keywords = f"Rejected by Suitability Filter ({score}%): {reason}"
+            db.commit()
+            return False
         
-    tailoring_job.matched_jobs += 1
+        # If passed, save the score anyway
+        db.commit()
+        
+    db.query(TailoringJob).filter(TailoringJob.id == tailoring_job.id).update(
+        {"matched_jobs": TailoringJob.matched_jobs + 1},
+        synchronize_session=False
+    )
     db.commit()
         
     # Step 3: JD Intelligence
@@ -209,14 +218,19 @@ async def process_single_job(db, tailoring_job, raw_job_data, master_resume, res
     raw_resume_text = master_resume.parsed_text or ""
     
     try:
+        from backend.models.core import MasterProfile
+        master_profile = db.query(MasterProfile).first()
+
         logger.info(f"Generating resume for {norm_job.company}...")
         # Step 7: ONE LLM Call
         html, prompt_used = resume_generator.generate_html(
             raw_resume_text,
             resume_context, 
+
             norm_job, 
             JDExtraction(**jd_intel), 
             GapAnalysis(**evidence_dict),
+            master_profile=master_profile,
             model_preference=tailoring_job.selected_model,
             feedback="" # No toxic feedback
         )
@@ -304,19 +318,20 @@ async def run_tailoring_pipeline(job_id: str):
         
         resume_generator = ResumeGenerator()
         
-        # Async Fan-out execution
-        tasks = []
-        for raw_job in scraped_data:
-            # We must use separate db sessions for concurrent tasks, or do them sequentially for safety.
-            # To avoid SQLAlchemy session sharing issues, we'll execute sequentially in this MVP,
-            # or we could spawn separate sessions. For stability, let's run them one by one here,
-            # or just create a new session inside the function if we use asyncio.gather.
-            # For this MVP version, let's run them sequentially to avoid DB locks.
-            # We can upgrade to a task queue later.
-            success = await process_single_job(db, job, raw_job, master_resume, resume_context, resume_generator)
-            if success:
-                job.generated_resumes += 1
-                db.commit()
+        # Async Fan-out execution via Celery
+        from celery import group
+        from backend.celery_app import process_resume_task
+        import asyncio
+        
+        celery_tasks = [process_resume_task.s(job.id, raw_job) for raw_job in scraped_data]
+        if celery_tasks:
+            result = group(celery_tasks).apply_async()
+            
+            # Poll until all Celery workers finish their jobs
+            while not result.ready():
+                await asyncio.sleep(2)
+                # Refresh job from DB to get the latest generated_resumes count
+                db.refresh(job)
                 
         _status(db, job, "Completed", {"completed_at": datetime.now(timezone.utc)})
 

@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tableBody   = document.getElementById('tr-table-body');
     const emptyState  = document.getElementById('tr-empty-state');
     const statTotal   = document.getElementById('stat-total');
-    const statReady   = document.getElementById('stat-ready');
+    const statActualRejected = document.getElementById('stat-rejected');
     const statApplied = document.getElementById('stat-applied');
     const statInterviewing = document.getElementById('stat-interviewing');
     const statOffers  = document.getElementById('stat-offers');
-    const statRejected = document.getElementById('stat-rejected');
+    const statHrScreening = document.getElementById('stat-hr-screening');
 
     // ------------------------------------------------
     // Status config
@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             let matchesFilter = true;
             if (currentFilter !== 'All') {
                 if (currentFilter === 'Interview') {
-                    matchesFilter = ['HR Screening', 'OA Scheduled', 'Interview', 'Final Round'].includes(a.status);
-                } else if (currentFilter === 'Offer' || currentFilter === 'Unmatched' || currentFilter === 'Applied' || currentFilter === 'Ready to Apply') {
+                    matchesFilter = ['Interview', 'Final Round'].includes(a.status);
+                } else if (currentFilter === 'Offer' || currentFilter === 'Unmatched' || currentFilter === 'Applied' || currentFilter === 'Rejected') {
                     matchesFilter = (a.status === currentFilter);
                 }
             }
@@ -135,9 +135,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="td-resume">
                         ${['Unmatched', 'Failed'].includes(item.status) ? 
                             '<span style="color:#888; font-style:italic;">N/A (No PDF Generated)</span>' :
-                            `<span>Tailored Resume</span>
-                             <button class="tr-btn-icon" title="Preview" aria-label="Preview Resume"
-                                onclick="window.open('${API_BASE}/api/applications/${item.id}/download', '_blank')"
+                            `<button class="tr-btn-icon" title="Preview" aria-label="Preview Resume"
+                                onclick="openDiffSidebar('${item.id}')"
                                 style="width:24px;height:24px;">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -185,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 </svg>
                             </button>
                             <div class="tr-more-menu">
-                                <button class="tr-more-item" onclick="window.open('${API_BASE}/api/applications/${item.id}/download','_blank')">View Resume</button>
+                                <button class="tr-more-item" onclick="openDiffSidebar('${item.id}')">View Resume</button>
                                 ${applyLink ? `<button class="tr-more-item" onclick="window.open('${escHtml(applyLink)}','_blank')">Apply Now</button>` : ''}
                                 <button class="tr-more-item" onclick="deleteApplication('${item.id}', this)" style="color: var(--danger, #ff4c4c)">Delete</button>
                             </div>
@@ -207,13 +206,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function updateStats(data) {
         if (!statTotal) return;
+        if (statHrScreening) {
+            statHrScreening.innerText = data.filter(a => a.status === 'HR Screening').length;
+        }
         statTotal.innerText = data.length;
-        statReady.innerText = data.filter(a => a.status === 'Ready to Apply').length;
-        statApplied.innerText = data.filter(a => a.status === 'Applied').length;
+        if (statActualRejected) {
+            statActualRejected.innerText = data.filter(a => ['Rejected', 'Unmatched'].includes(a.status)).length;
+        }
+        statApplied.innerText = data.filter(a => 
+            ['Applied', 'HR Screening', 'OA Scheduled', 'Interview', 'Final Round', 'Offer', 'Rejected', 'Ghosted', 'Withdrawn'].includes(a.status)).length;
         statInterviewing.innerText = data.filter(a =>
-            ['HR Screening','OA Scheduled','Interview','Final Round'].includes(a.status)).length;
+            ['Interview','Final Round'].includes(a.status)).length;
         statOffers.innerText = data.filter(a => a.status === 'Offer').length;
-        statRejected.innerText = data.filter(a => a.status === 'Unmatched').length;
     }
 
     // ------------------------------------------------
@@ -338,6 +342,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 created_at: app.created_at,
                 status:     mapStatus(app.application_status)
             }));
+            window.globalApplications = applications;
         } else {
             console.error('Failed to fetch applications:', res.status);
         }
@@ -392,5 +397,225 @@ async function downloadPDF(appId, company, role) {
         btn.disabled = false;
         btn.innerHTML = originalHTML;
     }
+}
+
+
+// ==========================================
+// Diff Sidebar Logic
+// ==========================================
+
+const diffSidebar = document.getElementById('diff-sidebar');
+const diffSidebarClose = document.getElementById('diff-sidebar-close');
+const diffSidebarBody = document.getElementById('diff-sidebar-body');
+
+if (diffSidebarClose) {
+    diffSidebarClose.addEventListener('click', () => {
+        diffSidebar.classList.remove('open');
+    });
+}
+
+window.openDiffSidebar = async function(appId) {
+    if (!diffSidebarBody) return;
+    
+    // Populate header info dynamically
+    const app = window.globalApplications?.find(a => a.id === appId);
+    if (app) {
+        const titleEl = document.getElementById('diff-sidebar-title');
+        const subtitleEl = document.getElementById('diff-sidebar-subtitle');
+        const downloadBtn = document.getElementById('diff-sidebar-download');
+        const applyBtn = document.getElementById('diff-sidebar-apply');
+        
+        if (titleEl) titleEl.innerText = `Tailored for ${app.company}`;
+        if (subtitleEl) subtitleEl.innerText = app.role;
+        
+        if (downloadBtn) {
+            // Unbind old onclick by cloning and replacing, then bind new one
+            const newDownloadBtn = downloadBtn.cloneNode(true);
+            downloadBtn.parentNode.replaceChild(newDownloadBtn, downloadBtn);
+            newDownloadBtn.onclick = () => window.downloadPDF(app.id, app.company, app.role);
+        }
+        
+        if (applyBtn) {
+            if (app.apply_link && app.apply_link !== '#') {
+                applyBtn.href = app.apply_link;
+                applyBtn.style.display = 'inline-flex';
+            } else {
+                applyBtn.style.display = 'none';
+            }
+        }
+    }
+
+    diffSidebarBody.innerHTML = '<div style="padding:40px;text-align:center;color:#000;">Loading compare data...</div>';
+    diffSidebar.classList.add('open');
+
+    try {
+        const res = await fetch(API_BASE + '/api/applications/' + appId + '/compare');
+
+        if (!res.ok) {
+            throw new Error('Failed to fetch comparison data');
+        }
+
+        const data = await res.json();
+        const originalText = (data.original_text || "").toLowerCase();
+        const generatedHtml = data.generated_html || "";
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(generatedHtml, 'text/html');
+
+        const walk = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        const nodesToReplace = [];
+
+        while (node = walk.nextNode()) {
+            const text = node.nodeValue;
+            if (text.trim() === '') continue;
+
+            const words = text.split(/(\b\w+\b)/);
+            let hasNew = false;
+            
+            const span = document.createElement('span');
+            words.forEach(word => {
+                if (word.length > 3 && /^[a-zA-Z]+$/.test(word)) {
+                    if (!originalText.includes(word.toLowerCase())) {
+                        const mark = document.createElement('span');
+                        mark.className = 'highlight-new';
+                        mark.textContent = word;
+                        span.appendChild(mark);
+                        hasNew = true;
+                    } else {
+                        span.appendChild(document.createTextNode(word));
+                    }
+                } else {
+                    span.appendChild(document.createTextNode(word));
+                }
+            });
+
+            if (hasNew) {
+                nodesToReplace.push({ oldNode: node, newNode: span });
+            }
+        }
+
+        nodesToReplace.forEach(({ oldNode, newNode }) => {
+            oldNode.parentNode.replaceChild(newNode, oldNode);
+        });
+
+        diffSidebarBody.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.minHeight = '1056px'; // Ensures it fills the A4 container
+        iframe.style.flex = '1';
+        iframe.style.border = 'none';
+        iframe.style.background = '#fff';
+        diffSidebarBody.appendChild(iframe);
+
+        iframe.contentWindow.document.open();
+        // inject highlight-new style into the iframe so it renders properly inside with premium style
+        // also hide the internal scrollbar to prevent double scrollbars
+        iframe.contentWindow.document.write('<style>html, body { overflow: hidden !important; } ::-webkit-scrollbar { display: none; } .highlight-new{background-color: rgba(34, 197, 94, 0.15) !important; border-bottom: 2px solid #22c55e !important; border-radius: 4px; padding: 1px 4px; color: #166534 !important; font-weight: 600; box-shadow: 0 2px 4px rgba(34,197,94,0.1);}</style>');
+        iframe.contentWindow.document.write(doc.documentElement.outerHTML);
+        iframe.contentWindow.document.close();
+
+        // Dynamically adjust iframe height to its internal content to allow the outer sidebar to handle all scrolling
+        setTimeout(() => {
+            try {
+                const docHeight = Math.max(
+                    iframe.contentWindow.document.body.scrollHeight,
+                    iframe.contentWindow.document.documentElement.scrollHeight,
+                    1056
+                );
+                iframe.style.minHeight = docHeight + 'px';
+                iframe.style.height = docHeight + 'px';
+            } catch (e) {
+                console.warn('Could not resize iframe', e);
+            }
+        }, 50);
+
+    } catch (err) {
+        console.error(err);
+        diffSidebarBody.innerHTML = '<div style="padding:40px;color:#ef4444;">Error: ' + err.message + '</div>';
+    }
+}
+
+// ==========================================
+// Manual Application Logic
+// ==========================================
+const addManualBtn = document.getElementById('add-manual-btn');
+const manualAddSidebar = document.getElementById('manual-add-sidebar');
+const manualSidebarClose = document.getElementById('manual-sidebar-close');
+const manualAddForm = document.getElementById('manual-add-form');
+const manualSubmitBtn = document.getElementById('manual-submit-btn');
+
+if (addManualBtn && manualAddSidebar) {
+    addManualBtn.addEventListener('click', () => {
+        manualAddSidebar.classList.add('open');
+    });
+}
+
+if (manualSidebarClose && manualAddSidebar) {
+    manualSidebarClose.addEventListener('click', () => {
+        manualAddSidebar.classList.remove('open');
+    });
+}
+
+if (manualAddForm) {
+    manualAddForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const originalText = manualSubmitBtn.innerText;
+        manualSubmitBtn.disabled = true;
+        manualSubmitBtn.innerText = 'Saving...';
+        
+        const formData = new FormData(manualAddForm);
+        const data = {
+            company: formData.get('company'),
+            job_title: formData.get('job_title'),
+            location: formData.get('location') || null,
+            apply_link: formData.get('apply_link') || null,
+            application_status: formData.get('application_status')
+        };
+        
+        try {
+            const res = await fetch(`${API_BASE}/api/applications/manual`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            if (res.ok) {
+                // Success: hide sidebar, reset form, re-fetch applications
+                manualAddSidebar.classList.remove('open');
+                manualAddForm.reset();
+                
+                // Re-fetch data entirely
+                const getRes = await fetch(`${API_BASE}/api/applications`);
+                if (getRes.ok) {
+                    const freshData = await getRes.json();
+                    applications = freshData.map(app => ({
+                        id:         app.id,
+                        company:    app.company || 'Unknown Company',
+                        role:       app.job_title || 'Unknown Role',
+                        location:   app.location || 'Remote',
+                        apply_link: app.apply_link || '#',
+                        ats_score:  app.ats_score || null,
+                        date:       formatDate(app.created_at),
+                        created_at: app.created_at,
+                        status:     mapStatus(app.application_status)
+                    }));
+                    window.globalApplications = applications;
+                    renderApplications(); // Assuming renderApplications relies on global `applications` array
+                }
+            } else {
+                const errData = await res.json();
+                alert(`Error saving application: ${errData.detail || 'Unknown error'}`);
+            }
+        } catch (err) {
+            console.error('Error submitting manual application:', err);
+            alert('Failed to save application due to network error.');
+        } finally {
+            manualSubmitBtn.disabled = false;
+            manualSubmitBtn.innerText = originalText;
+        }
+    });
 }
 
