@@ -1,6 +1,17 @@
 <div align="center">
-  <h1>Pathlight.ai 🚀</h1>
+  <h1>Pathlight.ai</h1>
   <p><strong>Full ATS-Optimized Resume Tailoring Platform</strong></p>
+  
+  <div>
+    <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+    <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+    <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+    <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
+    <img src="https://img.shields.io/badge/Celery-37814A?style=for-the-badge&logo=celery&logoColor=white" alt="Celery" />
+    <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+    <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+  </div>
 </div>
 
 <br>
@@ -23,11 +34,11 @@ graph TD
 ```
 
 ## Features
-- ✨ **AI-Powered Resume Tailoring:** Leverages Gemini, Mistral, and other state-of-the-art LLMs to rewrite and optimize resume content perfectly.
-- 🧩 **Chrome Extension Integration:** Seamlessly start tailoring jobs directly from job boards like LinkedIn with a single click.
-- 📊 **ATS Scoring:** Automatically calculates ATS fit and match scores based on the provided job description.
-- 📄 **PDF Generation:** Exports the fully tailored resume to a clean, highly ATS-readable PDF format.
-- 📈 **Application Tracking:** Built-in dashboard to manage all your tailored resumes and track your job application statuses.
+- **AI-Powered Resume Tailoring:** Leverages Gemini, Mistral, and other state-of-the-art LLMs to rewrite and optimize resume content perfectly.
+- **Chrome Extension Integration:** Seamlessly start tailoring jobs directly from job boards like LinkedIn with a single click.
+- **ATS Scoring:** Automatically calculates ATS fit and match scores based on the provided job description.
+- **PDF Generation:** Exports the fully tailored resume to a clean, highly ATS-readable PDF format.
+- **Application Tracking:** Built-in dashboard to manage all your tailored resumes and track your job application statuses.
 
 ## Installation
 Clone the repository to your local machine:
