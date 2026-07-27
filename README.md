@@ -1,67 +1,86 @@
-# Pathlight.ai
+<div align="center">
+  <h1>Pathlight.ai 🚀</h1>
+  <p><strong>Full ATS-Optimized Resume Tailoring Platform</strong></p>
+</div>
 
-**Pathlight.ai** is an AI-powered Job Co-Pilot and ATS-optimized resume tailor. It allows users to automatically generate perfectly tailored resumes targeting specific job descriptions, drastically improving their chances of passing Applicant Tracking Systems (ATS).
+<br>
 
-## 🚀 Core Features
+## What is Pathlight?
+Pathlight is an intelligent platform designed to automatically tailor resumes to specific job descriptions using advanced AI models. It ensures that your resume passes through Applicant Tracking Systems (ATS) by intelligently matching your skills, rewriting your bullet points, and highlighting your most relevant experiences for the role you're applying for.
 
-- **Automated Resume Tailoring**: Leverages Google Gemini and OpenRouter models to rewrite and optimize resumes against specific Job Descriptions.
-- **Dynamic Job Scraping**: Uses Apify to scrape live job postings directly from job boards via URL.
-- **Intelligent PDF Generation**: Converts HTML resumes into beautifully formatted, ATS-friendly PDFs using WeasyPrint.
-- **LLM Observability**: Integrated with Langfuse (via OpenTelemetry) to monitor token usage, API costs, LLM latency, and generation quality in real-time.
-- **Background Processing**: Heavy AI generation tasks are offloaded to Celery background workers to ensure the web application remains blazing fast and responsive.
+## Problem Statement
+Job seekers often struggle to get their resumes past automated Applicant Tracking Systems (ATS), resulting in qualified candidates being rejected before a human even reviews their application. Manually tailoring a resume for every single job application is incredibly time-consuming, tedious, and often imprecise. Pathlight automates this workflow, saving hours of work while drastically improving interview callback rates.
 
----
+## Architecture Diagram
+```mermaid
+graph TD
+    A[Frontend UI / Chrome Ext] -->|REST API| B[FastAPI Backend]
+    B -->|Database Operations| C[(PostgreSQL)]
+    B -->|Task Queue| D[Celery Workers]
+    D -->|Cache & Message Broker| E[(Redis)]
+    D -->|AI Processing| F[LLM APIs]
+    F -.->|Gemini / Mistral / OpenRouter| G[AI Engine]
+```
 
-## 🛠️ Complete Tech Stack
+## Features
+- ✨ **AI-Powered Resume Tailoring:** Leverages Gemini, Mistral, and other state-of-the-art LLMs to rewrite and optimize resume content perfectly.
+- 🧩 **Chrome Extension Integration:** Seamlessly start tailoring jobs directly from job boards like LinkedIn with a single click.
+- 📊 **ATS Scoring:** Automatically calculates ATS fit and match scores based on the provided job description.
+- 📄 **PDF Generation:** Exports the fully tailored resume to a clean, highly ATS-readable PDF format.
+- 📈 **Application Tracking:** Built-in dashboard to manage all your tailored resumes and track your job application statuses.
 
-Pathlight.ai utilizes a modern, containerized architecture separating a lightweight frontend from a robust, asynchronous Python backend.
+## Installation
+Clone the repository to your local machine:
+```bash
+git clone https://github.com/jayanthkumar10/PathLight.ai.git
+cd PathLight.ai
+```
 
-### Frontend (Client-Side)
-- **HTML5 / CSS3 / JavaScript (ES6+)**: A dependency-free, vanilla frontend architecture designed for maximum performance without the overhead of heavy frameworks like React or Vue.
-- **Client-Side Routing**: Custom vanilla JavaScript implementations to handle dynamic data fetching and DOM updates seamlessly.
+## Configuration
+1. Copy the example environment file to `.env`:
+```bash
+cp .env.example .env
+```
+2. Populate the required API keys (Gemini, OpenRouter, Apify, etc.) inside your new `.env` file.
 
-### Backend (Server-Side)
-- **Python (3.11+)**: The core programming language.
-- **FastAPI**: A high-performance, asynchronous web framework for building the REST APIs.
-- **Uvicorn**: The ASGI web server used to serve the FastAPI application.
-- **Pydantic**: Used for strict data validation, serialization, and settings/environment management.
+## Run Backend
+The easiest way to run the entire backend stack (FastAPI, PostgreSQL, Redis, Celery) is by using Docker Compose:
 
-### Database & Caching
-- **PostgreSQL (v15)**: The primary relational database used to store users, tailored resumes, and job application tracking data.
-- **SQLAlchemy**: The Object-Relational Mapper (ORM) used to interact with PostgreSQL using Python objects.
-- **Psycopg2**: The PostgreSQL database adapter for Python.
-- **Redis (v7)**: An in-memory data store acting as the message broker for background task queues.
+```bash
+docker-compose up -d --build
+```
+Alternatively, you can use the provided startup scripts:
+```bash
+./start.bat  # On Windows
+./start.sh   # On Linux/macOS
+```
+The API will be available at `http://localhost:8000`. Interactive API documentation is automatically generated and available at `http://localhost:8000/docs`.
 
-### Background Processing
-- **Celery**: A distributed task queue system. All LLM calls (which take several seconds) are offloaded to Celery workers so the main API does not block or timeout.
+## Run Frontend
+The frontend consists of static files that are served directly by the FastAPI backend from the `public/` directory. Once the backend is running, simply navigate to `http://localhost:8000` in your web browser to use the application.
 
-### AI / Large Language Models
-- **Google Gemini API**: Default models (e.g., `gemini-1.5-flash`) used for rapid, high-quality resume generation.
-- **OpenRouter API**: Acts as a robust fallback mechanism (using models like `meta-llama/llama-3.3-70b-instruct:free`) if Gemini rate-limits or fails.
-- **Langfuse**: Provides full observability for the LLMs, tracking traces, token costs, prompt inputs/outputs, and latency.
+## Environment Variables
+Here are the key environment variables used in Pathlight:
+- `DATABASE_URL`: Connection string for PostgreSQL (e.g., `postgresql://postgres:postgres@postgres:5432/pathlight`)
+- `REDIS_URL`: Connection string for Redis broker (e.g., `redis://redis:6379/0`)
+- `GEMINI_API_KEY`: API key for Google Gemini models
+- `APIFY_API_TOKEN`: API token for Apify integration (used for scraping)
+- `OPEN_ROUTER_API_KEY`: API key for accessing OpenRouter LLMs
+- `MISTRAL_API_KEY`: API key for Mistral AI
+- `JWT_SECRET`: Secret key for JWT authentication sessions
+- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`: OAuth credentials for Google Sign-In integration
 
-### Document Processing & NLP
-- **WeasyPrint**: Converts raw HTML resumes into pixel-perfect PDF documents.
-- **pdfplumber & pypdf**: Extracts and parses text from user-uploaded PDF resumes.
-- **python-docx**: Parses Microsoft Word (`.docx`) documents.
-- **spaCy & rapidfuzz**: Used for Natural Language Processing and fuzzy string matching (e.g., matching user skills to JD skills).
+## Screenshots
+*(Add screenshots of the Pathlight dashboard and generated resumes here)*
 
-### Integrations & Security
-- **Apify Client**: Integrates with Apify actors to scrape job boards securely.
-- **PyJWT, passlib, bcrypt, python-jose**: The security stack used to hash user passwords and issue JSON Web Tokens (JWT) for secure authentication.
+## Roadmap
+- [ ] Add support for more LLM providers and local models.
+- [ ] Improve the ATS scoring and keyword matching algorithm.
+- [ ] Add multi-language resume support.
+- [ ] Enhance Chrome extension with automatic application form filling.
 
-### Infrastructure & Deployment
-- **Docker & Docker Compose**: The entire application is containerized. A single `docker-compose.yml` orchestrates the API, Celery Worker, PostgreSQL, and Redis containers in complete isolation.
+## Contributing
+Contributions are always welcome! Please feel free to open an issue or submit a pull request with your proposed changes.
 
----
-
-## 🏗️ Architecture Overview
-
-1. **Client Request**: The user submits a job description (via text or URL) and requests a tailored resume from the frontend.
-2. **API Layer**: FastAPI receives the request, validates the payload using Pydantic, and saves a "Pending" job state in PostgreSQL.
-3. **Message Queue**: FastAPI pushes the tailoring task onto the Redis message queue.
-4. **Background Worker**: A Celery Worker picks up the task from Redis and begins processing.
-5. **AI Processing**: The Celery worker parses the user's base resume, constructs a highly-optimized prompt, and streams it to Google Gemini (or OpenRouter).
-6. **Observability**: As the AI generates the text, Langfuse intercepts the request to record token counts, generation time, and costs.
-7. **Completion & PDF**: The worker saves the newly generated HTML resume to the database, triggers WeasyPrint to generate a PDF, and updates the job status to "Completed".
-8. **Client Update**: The frontend (which has been polling or waiting) receives the "Completed" status and displays the stunning new resume to the user.
+## License
+This project is licensed under the MIT License.
