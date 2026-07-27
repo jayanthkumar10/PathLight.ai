@@ -28,18 +28,17 @@ def get_resume_context(db, master_resume) -> Dict[str, Any]:
     needs_hydration = False
     
     current_title = cached.get("current_title", "")
-    profile_summary = cached.get("profile_summary", "")
     hard_skills = [s.strip() for s in (master_resume.hard_skills or "").split(",") if s.strip()]
     soft_skills = [s.strip() for s in (master_resume.soft_skills or "").split(",") if s.strip()]
     tech_skills = [s.strip() for s in (master_resume.technical_skills or "").split(",") if s.strip()]
     action_verbs = [v.strip() for v in (master_resume.action_verbs or "").split(",") if v.strip()]
 
-    if not hard_skills or not soft_skills or not action_verbs or not current_title or not profile_summary:
+    if not hard_skills or not soft_skills or not action_verbs or not current_title:
         logger.info(f"Master Resume {master_resume.id} is missing structured data. Hydrating via LLM...")
         needs_hydration = True
         
         llm = LLMClient()
-        sys_prompt = "You are an expert resume parser. Extract the following from the resume text into a strict JSON object: 'current_title' (string), 'profile_summary' (a dense 3-4 sentence paragraph summarizing the candidate's core expertise, years of experience, and strongest skills), 'hard_skills' (list of strings), 'soft_skills' (list of strings), 'technical_skills' (list of strings), 'action_verbs' (list of strings). Output ONLY valid JSON."
+        sys_prompt = "You are an expert resume parser. Extract the following from the resume text into a strict JSON object: 'current_title' (string), 'hard_skills' (list of strings), 'soft_skills' (list of strings), 'technical_skills' (list of strings), 'action_verbs' (list of strings). Output ONLY valid JSON."
         user_prompt = f"Resume Text:\n{master_resume.parsed_text[:10000]}"
         
         try:
@@ -57,7 +56,6 @@ def get_resume_context(db, master_resume) -> Dict[str, Any]:
             data = json.loads(clean_res)
             
             current_title = data.get("current_title", current_title)
-            profile_summary = data.get("profile_summary", profile_summary)
             hard_skills = data.get("hard_skills", hard_skills)
             soft_skills = data.get("soft_skills", soft_skills)
             tech_skills = data.get("technical_skills", tech_skills)
@@ -65,7 +63,6 @@ def get_resume_context(db, master_resume) -> Dict[str, Any]:
             
             # Update DB
             cached["current_title"] = current_title
-            cached["profile_summary"] = profile_summary
             master_resume.parsed_json = json.dumps(cached)
             master_resume.hard_skills = ",".join(hard_skills)
             master_resume.soft_skills = ",".join(soft_skills)
@@ -81,7 +78,6 @@ def get_resume_context(db, master_resume) -> Dict[str, Any]:
     resume_context = {
         "candidate_name": cached.get("candidate_name", "Candidate"),
         "current_title": current_title,
-        "profile_summary": profile_summary,
         "contact_info": cached.get("contact_info", ""),
         "years_of_experience": cached.get("years_of_experience", 0),
         "education": cached.get("education", ""),

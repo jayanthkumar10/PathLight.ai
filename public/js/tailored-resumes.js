@@ -470,23 +470,43 @@ window.openDiffSidebar = async function(appId) {
             const text = node.nodeValue;
             if (text.trim() === '') continue;
 
-            const words = text.split(/(\b\w+\b)/);
+            const tokens = text.split(/(\b\w+\b)/);
             let hasNew = false;
             
             const span = document.createElement('span');
-            words.forEach(word => {
-                if (word.length > 3 && /^[a-zA-Z]+$/.test(word)) {
-                    if (!originalText.includes(word.toLowerCase())) {
+            
+            // Build an array of just the word tokens for context lookups
+            const wordsOnly = tokens.filter(t => /^[a-zA-Z]+$/.test(t)).map(t => t.toLowerCase());
+            let wordIndex = 0;
+
+            tokens.forEach(token => {
+                if (token.length > 2 && /^[a-zA-Z]+$/.test(token)) {
+                    // Create a contextual phrase (trigram) to check if this specific usage is new
+                    const prevWord = wordIndex > 0 ? wordsOnly[wordIndex - 1] : "";
+                    const nextWord = wordIndex < wordsOnly.length - 1 ? wordsOnly[wordIndex + 1] : "";
+                    
+                    const phrase1 = `${prevWord} ${token.toLowerCase()}`.trim();
+                    const phrase2 = `${token.toLowerCase()} ${nextWord}`.trim();
+                    
+                    // It's considered new if neither 2-word phrase around it exists in the original text
+                    const isNew = (!originalText.includes(phrase1) && !originalText.includes(phrase2)) 
+                                  || (!originalText.includes(token.toLowerCase()));
+                                  
+                    if (isNew) {
                         const mark = document.createElement('span');
                         mark.className = 'highlight-new';
-                        mark.textContent = word;
+                        mark.textContent = token;
                         span.appendChild(mark);
                         hasNew = true;
                     } else {
-                        span.appendChild(document.createTextNode(word));
+                        span.appendChild(document.createTextNode(token));
                     }
+                    wordIndex++;
                 } else {
-                    span.appendChild(document.createTextNode(word));
+                    if (/^[a-zA-Z]+$/.test(token)) {
+                        wordIndex++;
+                    }
+                    span.appendChild(document.createTextNode(token));
                 }
             });
 

@@ -76,8 +76,7 @@ class ApifyClient:
         # Default to United States if no location provided to prevent 0 results
         location_encoded = urllib.parse.quote(location) if location else urllib.parse.quote("United States")
 
-        # Keeping the trailing slash before ? to prevent redirects that strip parameters
-        url = f"https://www.linkedin.com/jobs/search/?keywords={role_encoded}&location={location_encoded}"
+        url = f"https://www.linkedin.com/jobs/search?keywords={role_encoded}&location={location_encoded}"
         
         if posted_within:
             # Parse '24H', '1H', etc. to seconds
@@ -89,8 +88,11 @@ class ApifyClient:
             elif posted_within.lower() == "past_week":
                 url += "&f_TPR=r604800"
 
+        # Apify requires count to be at least 10
+        actual_count = max(10, count)
+
         run_input = {
-            "count": count,
+            "count": actual_count,
             "scrapeCompany": True,
             "splitByLocation": False,
             "urls": [url]

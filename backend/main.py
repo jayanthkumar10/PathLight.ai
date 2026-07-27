@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 from backend.database import get_db
-from backend.schemas.job import TailoringJobCreate, TailoringJobResponse, ApplicationResponse, SingleTailorCreate, ManualApplicationCreate
+from backend.schemas.job import TailoringJobCreate, TailoringJobResponse, ApplicationResponse, SingleTailorCreate, ManualApplicationCreate, ExtensionJobCreate
 from backend.repositories.job_repo import tailoring_job_repo, application_repo
 from backend.services.pipeline import run_tailoring_pipeline, run_single_tailoring_pipeline
 from backend.models.resume import MasterResume
@@ -101,6 +101,28 @@ def start_single_tailoring(
     )
     job = tailoring_job_repo.create(db, obj_in=tj_create)
     background_tasks.add_task(run_single_tailoring_pipeline, job.id, job_request.job_description, job_request.job_url)
+    return job
+
+@app.post("/api/extension/tailor", response_model=TailoringJobResponse)
+def extension_tailor_job(
+    job_request: ExtensionJobCreate,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    """Start a single tailoring job from the Chrome extension."""
+    logger.info(f"New extension tailoring request | company={job_request.company}")
+    
+    # We create a dummy TailoringJob to track this single job execution in the UI
+    tj_create = TailoringJobCreate(
+        target_role=job_request.title,
+        selected_model="mistral-small-latest", # Defaulting to valid mistral model
+        location=job_request.location,
+        requested_jobs=1
+    )
+    job = tailoring_job_repo.create(db, obj_in=tj_create)
+    
+    # Run the single pipeline, passing the extension scraped text
+    background_tasks.add_task(run_single_tailoring_pipeline, job.id, job_request.descriptionText, job_request.url, job_request.company, job_request.location)
     return job
 
 

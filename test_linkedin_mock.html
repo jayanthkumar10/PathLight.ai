@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn Mock</title>
+</head>
+<body>
+    <!-- Simulating left pane -->
+    <div class="jobs-search-results-list">
+        <ul>
+            <li>Job 1</li>
+            <li>Job 2</li>
+        </ul>
+    </div>
+
+    <!-- Simulating right pane (split view) -->
+    <div class="job-details-jobs-unified-top-card__container--two-pane" style="height: 1000px; display: block;">
+        <h1 class="t-24">Agentic AI Engineer</h1>
+        <div class="job-details-jobs-unified-top-card__company-name">
+            <a href="/company/talentgigs">Talentgigs</a>
+        </div>
+        <div class="job-details-jobs-unified-top-card__primary-description-container">
+            <span class="tvm__text">Hyderabad, Telangana, India</span>
+        </div>
+        
+        <h2 class="text-heading-large">About the job</h2>
+        <div class="jobs-description-content__text">
+            <span>This is a mock description for an Agentic AI Engineer. We are looking for someone who can build autonomous agents using LLMs.</span>
+        </div>
+    </div>
+
+    <h2>Test Result:</h2>
+    <pre id="test-output">Running test...</pre>
+
+    <script src="./extension/popup.js"></script>
+    <script>
+        setTimeout(() => {
+            try {
+                // Mock window.location.href for the script by wrapping the call
+                // Actually popup.js uses window.location.href, we can't overwrite it easily.
+                // Let's just run the function and see what it returns.
+                const result = extractJobFromDOM();
+                document.getElementById('test-output').textContent = JSON.stringify(result, null, 2);
+            } catch (e) {
+                document.getElementById('test-output').textContent = 'Error: ' + e.toString();
+            }
+        }, 500);
+    </script>
+</body>
+</html>

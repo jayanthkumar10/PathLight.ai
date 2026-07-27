@@ -5,7 +5,7 @@ from backend.services.llm.mcp import LLMClient
 
 logger = logging.getLogger(__name__)
 
-def check_job_suitability(job: NormalizedJob, candidate_summary: str, min_confidence: int = 55, model: str = "gemini-1.5-flash") -> tuple[bool, str, int]:
+def check_job_suitability(job: NormalizedJob, candidate_summary: str, min_confidence: int = 55, model: str = "gemini-1.5-flash-latest") -> tuple[bool, str, int]:
     """
     Intelligent Suitability filter using LLM.
     Evaluates the full JD against the candidate's profile summary.

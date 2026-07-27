@@ -1,13 +1,42 @@
 # Python
 __pycache__/
 *.py[cod]
-*.class
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Virtual Environments
 .venv/
 venv/
 env/
+ENV/
 
-# Environment Variables
+# Environment Variables & Secrets
 .env
+.env.local
+.env.*.local
+*.pem
+credentials.json
+client_secret.json
 
 # Project Specific
 pathlight.db
@@ -17,15 +46,29 @@ uploads/
 test_*.pdf
 temp_*
 Projects/
-
-# Logs
 *.log
 api.log
+api2.log
 celery.log
-
-# Node
-node_modules/
-
-# Scripts and Scratch
 scratch/
-fix_db.py
+temp_repo/
+temp_repo2/
+
+# Node / JS
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+dist/
+build/
+
+# IDE & OS Files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vs/

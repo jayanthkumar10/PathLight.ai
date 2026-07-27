@@ -13,7 +13,6 @@ class TailoringJob(Base):
     location = Column(String(255), nullable=True)
     posted_within = Column(String(50), nullable=True)
     requested_jobs = Column(Integer, default=0)
-    min_confidence = Column(Integer, default=55)
     scanned_jobs = Column(Integer, default=0)      # actual jobs returned by Apify
     matched_jobs = Column(Integer, default=0)      # passed YOE filter
     generated_resumes = Column(Integer, default=0) # successfully tailored
@@ -79,7 +78,6 @@ class Application(Base):
     generated_html = Column(Text, nullable=True)
     ats_score = Column(Float, nullable=True)
     fit_score = Column(Float, nullable=True)
-    match_confidence = Column(Integer, nullable=True)
     generation_time = Column(Float, nullable=True)
     injected_keywords = Column(Text, nullable=True)
     missing_keywords = Column(Text, nullable=True)

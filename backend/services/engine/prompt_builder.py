@@ -5,7 +5,8 @@ def build_summary_agent_prompt(
     resume_context: dict,
     job,
     jd_extraction,
-    gap_analysis
+    gap_analysis,
+    ats_feedback: str = ""
 ) -> tuple[str, str]:
     """
     Agent 2: Professional Summary Agent.
@@ -32,6 +33,7 @@ Company: {job.company}
 ## RAW RESUME DATA (Source of Truth)
 {raw_resume_text}
 
+{"## CRITIQUE FROM PREVIOUS RUN (MUST FIX):" + chr(10) + ats_feedback + chr(10) if ats_feedback else ""}
 Output ONLY the raw JSON object:
 {{
   "professional_summary": "..."
@@ -45,7 +47,8 @@ def build_experience_agent_prompt(
     resume_context: dict,
     job,
     jd_extraction,
-    gap_analysis
+    gap_analysis,
+    ats_feedback: str = ""
 ) -> tuple[str, str]:
     """
     Agent 4: Experience Bullet Rewriter Agent.
@@ -74,6 +77,7 @@ Company: {job.company}
 ## RAW RESUME DATA (Source of Truth)
 {raw_resume_text}
 
+{"## CRITIQUE FROM PREVIOUS RUN (MUST FIX):" + chr(10) + ats_feedback + chr(10) if ats_feedback else ""}
 Output ONLY the raw JSON object:
 {{
   "tcs_bullets": "<li>...</li><li>...</li><li>...</li>"
@@ -87,7 +91,8 @@ def build_projects_agent_prompt(
     resume_context: dict,
     job,
     jd_extraction,
-    gap_analysis
+    gap_analysis,
+    ats_feedback: str = ""
 ) -> tuple[str, str]:
     """
     Agent 5: Project Bullet Points Agent.
@@ -114,6 +119,7 @@ Company: {job.company}
 ## RAW RESUME DATA (Source of Truth)
 {raw_resume_text}
 
+{"## CRITIQUE FROM PREVIOUS RUN (MUST FIX):" + chr(10) + ats_feedback + chr(10) if ats_feedback else ""}
 Output ONLY the raw JSON object:
 {{
   "project_1_bullets": "<li>...</li><li>...</li><li>...</li>",
@@ -125,7 +131,8 @@ Output ONLY the raw JSON object:
 
 def build_technical_skills_agent_prompt(
     master_skills_str: str,
-    jd_extraction
+    jd_extraction,
+    ats_feedback: str = ""
 ) -> tuple[str, str]:
     """
     Agent X: Technical Skills Filter & Ordering Agent.
@@ -147,6 +154,7 @@ CRITICAL RULES & STRICT CONSTRAINTS:
 ## CANDIDATE MASTER SKILLS (Source of Truth - DO NOT ADD TO THIS)
 {master_skills_str}
 
+{"## CRITIQUE FROM PREVIOUS RUN (MUST FIX):" + chr(10) + ats_feedback + chr(10) if ats_feedback else ""}
 Output ONLY the raw JSON object representing the categorized skills:
 {{
   "Languages": ["..."],
@@ -160,7 +168,8 @@ def build_dynamic_experience_prompt(
     master_profile_exp: list,
     job,
     jd_extraction,
-    gap_analysis
+    gap_analysis,
+    ats_feedback: str = ""
 ) -> tuple[str, str]:
     """
     Dynamic Experience Bullet Rewriter.
@@ -186,6 +195,7 @@ Company: {job.company}
 ## RAW EXPERIENCES (Source of Truth)
 {json.dumps(master_profile_exp, indent=2)}
 
+{"## CRITIQUE FROM PREVIOUS RUN (MUST FIX):" + chr(10) + ats_feedback + chr(10) if ats_feedback else ""}
 Output ONLY the raw JSON object formatted exactly like this:
 {{
   "exp_0": "<li>...</li><li>...</li><li>...</li>",
@@ -199,7 +209,8 @@ def build_dynamic_projects_prompt(
     master_profile_proj: list,
     job,
     jd_extraction,
-    gap_analysis
+    gap_analysis,
+    ats_feedback: str = ""
 ) -> tuple[str, str]:
     """
     Dynamic Project Bullet Rewriter.
@@ -225,6 +236,7 @@ Company: {job.company}
 ## RAW PROJECTS (Source of Truth)
 {json.dumps(master_profile_proj, indent=2)}
 
+{"## CRITIQUE FROM PREVIOUS RUN (MUST FIX):" + chr(10) + ats_feedback + chr(10) if ats_feedback else ""}
 Output ONLY the raw JSON object formatted exactly like this:
 {{
   "proj_0": "<li>...</li><li>...</li><li>...</li>",

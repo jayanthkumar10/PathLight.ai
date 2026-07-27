@@ -18,7 +18,7 @@ def run_test():
 
     # Start Tailoring
     payload = {
-        "selected_model": "gemini-1.5-flash",
+        "selected_model": "gemini-2.5-flash",
         "target_role": "Python Developer",
         "location": "San Francisco",
         "posted_within": "past_week",

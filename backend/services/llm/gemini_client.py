@@ -336,7 +336,7 @@ class GeminiClient:
             from google.genai import types
             full_prompt = (system + "\n\n" + prompt) if system else prompt
             response = self.client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.5-flash',
                 contents=full_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -536,7 +536,7 @@ IMPORTANT: Return ONLY valid JSON matching this exact schema. No markdown, no ex
         jd_analysis: JDExtraction,
         resume_text: str,
         resume_skills: dict,
-        generation_model: str = "gemini-1.5-flash"
+        generation_model: str = "gemini-2.5-flash"
     ) -> str:
         """
         Generate ATS-optimized HTML resume using the skeleton.

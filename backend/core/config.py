@@ -1,8 +1,5 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class Settings(BaseSettings):
     # App Config
@@ -13,6 +10,7 @@ class Settings(BaseSettings):
     APIFY_API_TOKEN: str = Field(default="")
     GEMINI_API_KEY: str = Field(default="")
     OPEN_ROUTER_API_KEY: str = Field(default="")
+    MISTRAL_API_KEY: str = Field(default="")
     
     # Auth (Google)
     GOOGLE_CLIENT_ID: str = Field(default="")

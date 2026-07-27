@@ -126,20 +126,17 @@ function bindAITailoringFlow() {
         const timeChip    = document.querySelector('.bulk-linkedin-chip.active');
         const stepperInput = document.getElementById('stepper-input');
         const modelSelect  = document.getElementById('model-select');
-        const confidenceInput = document.getElementById('confidence-input');
 
         const targetRole = (roleInput && roleInput.value.trim()) ? roleInput.value.trim() : 'AI Engineer';
         const location   = (locationInput && locationInput.value.trim()) ? locationInput.value.trim() : '';
-        const model      = modelSelect ? modelSelect.value : 'gemini-1.5-flash';
-        const minConf    = confidenceInput ? parseInt(confidenceInput.value, 10) : 55;
+        const model      = modelSelect ? modelSelect.value : 'mistral-small-latest';
 
         const requestData = {
             target_role:    targetRole,
             location:       location,
             posted_within:  timeChip ? timeChip.textContent.trim() : '24H',
             requested_jobs: stepperInput ? parseInt(stepperInput.value, 10) : 10,
-            selected_model: model,
-            min_confidence: minConf
+            selected_model: model
         };
 
         // ======================================================
