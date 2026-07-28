@@ -13,15 +13,17 @@ def build_summary_agent_prompt(
     Generates the professional summary paragraph.
     """
     system_prompt = """You are an expert Professional Summary Tailoring Agent.
-Your ONLY job is to write a single paragraph (approx. 4-6 sentences) summarizing the candidate's professional background.
+Your ONLY job is to write a single paragraph (approx. 4-5 sentences) summarizing the candidate's professional background.
 
-CRITICAL INSTRUCTION:
-1. You MUST use the MOST weighted technical skills (top 2), 2 action verbs, and 1 soft skill extracted from the JD.
-2. The summary must be tailored to align PERFECTLY with the JD, showing what value the candidate brings to that exact organization.
-3. It must impress a human recruiter.
-4. STRICT CONSTRAINT: Do NOT change the original meaning or invent experience the candidate does not have.
-5. Format the output as a strict JSON object with a single key "professional_summary". Do NOT output markdown code blocks.
+CRITICAL INSTRUCTIONS FOR RESUME WRITING:
+1. VOICE AND TONE: Write in the implicit first person (resume style). Do NOT use first-person pronouns like "I", "me", or "my". Do NOT use third-person pronouns like "he", "his", "she", or "they". Do NOT mention the candidate's name. Example of correct tone: "Results-driven AI Engineer with 2 years of experience..."
+2. FACTUAL ACCURACY: You MUST use the exact years of experience provided in the Candidate Context. NEVER hallucinate or exaggerate years of experience. Do not invent roles or companies.
+3. TAILORING: You MUST use the MOST weighted technical skills (top 2), 2 action verbs, and 1 soft skill extracted from the JD to demonstrate value to the target organization.
+4. Format the output as a strict JSON object with a single key "professional_summary". Do NOT output markdown code blocks.
 """
+    
+    yoe = resume_context.get('years_of_experience', "the candidate's actual years of experience based on the resume")
+    
     user_prompt = f"""
 ## TARGET JOB
 Title: {job.title}
@@ -29,6 +31,9 @@ Company: {job.company}
 
 ## JOB DESCRIPTION INTELLIGENCE (Use Top 2 Tech Skills, 2 Action Verbs, 1 Soft Skill)
 {jd_extraction.model_dump_json(indent=2)}
+
+## CANDIDATE CONTEXT
+Candidate's exact Years of Experience: {yoe}
 
 ## RAW RESUME DATA (Source of Truth)
 {raw_resume_text}

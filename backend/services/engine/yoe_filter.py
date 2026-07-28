@@ -39,10 +39,11 @@ def passes_yoe_filter(job: NormalizedJob, candidate_yoe: int) -> tuple[bool, str
         """
         
         response = llm.generate_text(
-            "You are an expert technical recruiter.",
-            prompt,
-            "meta-llama/llama-3.3-70b-instruct:free",
-            "application/json"
+            system_prompt="You are an expert technical recruiter.",
+            user_prompt=prompt,
+            model_preference="mistral-small-latest",
+            response_mime_type="application/json",
+            agent_name="YOEFilterNode"
         )
         
         # Clean response

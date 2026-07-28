@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from typing import List
 from pydantic import BaseModel, Field
 from backend.services.llm.mcp import LLMClient
@@ -12,6 +13,19 @@ class JDExtraction(BaseModel):
     soft_skills: List[str] = Field(default_factory=list)
     technical_skills: List[str] = Field(default_factory=list)
     action_verbs: List[str] = Field(default_factory=list)
+
+def _extract_json(text: str) -> dict:
+    text = text.strip()
+    match = re.search(r'\{.*\}', text, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(0))
+        except json.JSONDecodeError:
+            pass
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        return {}
 
 def extract_jd_intelligence(jd_text: str) -> JDExtraction:
     """
@@ -30,18 +44,8 @@ def extract_jd_intelligence(jd_text: str) -> JDExtraction:
     user_prompt = f"Job Description:\n{jd_text[:10000]}"
     
     try:
-        res = llm.generate_text(sys_prompt, user_prompt, response_mime_type="application/json")
-        
-        clean_res = res.strip()
-        if clean_res.startswith("```"):
-            lines = clean_res.split('\n')
-            if len(lines) > 1 and lines[0].startswith("```"):
-                lines = lines[1:]
-            if lines and lines[-1].startswith("```"):
-                lines = lines[:-1]
-            clean_res = "\n".join(lines).strip()
-            
-        data = json.loads(clean_res)
+        res = llm.generate_text(sys_prompt, user_prompt, response_mime_type="application/json", agent_name="JDExtractionNode")
+        data = _extract_json(res)
         
         return JDExtraction(
             job_title=data.get("job_title", ""),
@@ -77,25 +81,15 @@ def extract_jd_metadata(jd_text: str) -> JDMeta:
     user_prompt = f"Job Description:\n{jd_text[:5000]}"
     
     try:
-        res = llm.generate_text(sys_prompt, user_prompt, response_mime_type="application/json")
-        
-        clean_res = res.strip()
-        if clean_res.startswith("```"):
-            lines = clean_res.split('\n')
-            if len(lines) > 1 and lines[0].startswith("```"):
-                lines = lines[1:]
-            if lines and lines[-1].startswith("```"):
-                lines = lines[:-1]
-            clean_res = "\n".join(lines).strip()
-            
-        data = json.loads(clean_res)
+        res = llm.generate_text(sys_prompt, user_prompt, response_mime_type="application/json", agent_name="JDMetaExtractionNode")
+        data = _extract_json(res)
         
         return JDMeta(
-            job_title=data.get("job_title", "Unknown Role"),
-            company=data.get("company", "Unknown Company"),
-            location=data.get("location", "Not Specified"),
-            employment_type=data.get("employment_type", "Full-time"),
-            salary_range=data.get("salary_range", "Not Specified")
+            job_title=data.get("job_title", "Unknown Role") or "Unknown Role",
+            company=data.get("company", "Unknown Company") or "Unknown Company",
+            location=data.get("location", "Not Specified") or "Not Specified",
+            employment_type=data.get("employment_type", "Full-time") or "Full-time",
+            salary_range=data.get("salary_range", "Not Specified") or "Not Specified"
         )
     except Exception as e:
         logger.error(f"JD Meta LLM Extraction failed: {e}")

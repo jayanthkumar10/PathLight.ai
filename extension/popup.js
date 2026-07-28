@@ -27,123 +27,90 @@ function extractJobFromDOM() {
       }
     } catch (e) {}
 
-    // Try to find the active job card in the search list as a highly robust fallback
-    let cardTitle = null, cardCompany = null, cardLocation = null;
+    let title = null;
+    let company = null;
+    let location = null;
+
+    // STRATEGY A: JSON-LD Structured Data (Most Robust)
     try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const currentJobId = urlParams.get('currentJobId');
-      if (currentJobId) {
-        const card = document.querySelector(`[data-job-id="${currentJobId}"]`) || 
-                     document.querySelector(`[data-occludable-job-id="${currentJobId}"]`) ||
-                     document.querySelector(`[data-job-id*="${currentJobId}"]`) ||
-                     document.querySelector(`[data-occludable-job-id*="${currentJobId}"]`) ||
-                     document.querySelector(`[data-entity-urn*="${currentJobId}"]`);
-        if (card) {
-          const tEl = card.querySelector('.job-card-list__title, .job-card-container__link strong, a[class*="job-card"] strong, [class*="job-title"]');
-          if (tEl) cardTitle = tEl.textContent.trim();
-          
-          const cEl = card.querySelector('.job-card-container__company-name, .job-card-container__primary-description, .artdeco-entity-lockup__subtitle, [class*="company-name"], [class*="subtitle"]');
-          if (cEl) {
-            cardCompany = cEl.textContent.trim();
-          } else {
-            const logo = card.querySelector('img[alt]');
-            if (logo && logo.alt) cardCompany = logo.alt.replace(/ logo$/i, '').trim();
+      const ldScripts = document.querySelectorAll('script[type="application/ld+json"]');
+      for (let script of ldScripts) {
+        const data = JSON.parse(script.textContent);
+        if (data && data['@type'] === 'JobPosting') {
+          if (data.title) title = data.title;
+          if (data.hiringOrganization && data.hiringOrganization.name) company = data.hiringOrganization.name;
+          if (data.jobLocation && data.jobLocation.address && data.jobLocation.address.addressLocality) {
+            location = data.jobLocation.address.addressLocality;
+            if (data.jobLocation.address.addressRegion) location += ', ' + data.jobLocation.address.addressRegion;
           }
-          
-          const lEl = card.querySelector('.job-card-container__metadata-item, [class*="metadata-item"], [class*="location"]');
-          if (lEl) cardLocation = lEl.textContent.trim();
+          break;
         }
       }
     } catch (e) {}
 
+    // STRATEGY B: Document Title Parsing
+    // LinkedIn titles are often: "Software Engineer at Acme Corp | LinkedIn"
+    if (!title || !company) {
+      try {
+        const docTitle = document.title || "";
+        const parts = docTitle.split(' at ');
+        if (parts.length >= 2) {
+          if (!title) title = parts[0].trim();
+          const compPart = parts[1].split(' | ')[0];
+          if (!company && compPart) company = compPart.trim();
+        } else {
+            // Alternative: "Acme Corp hiring Software Engineer in New York..."
+            const hiringParts = docTitle.split(' hiring ');
+            if (hiringParts.length >= 2) {
+                if (!company) company = hiringParts[0].trim();
+                const titlePart = hiringParts[1].split(' in ')[0];
+                if (!title && titlePart) title = titlePart.trim();
+            }
+        }
+      } catch (e) {}
+    }
+
     // Helper to find the active right pane
     function getActivePane() {
-        // Find the description container, which is definitely in the right pane
         const descEl = document.querySelector('.jobs-description__content, #job-details, .jobs-description__container, [class*="jobs-description"]');
         if (descEl) {
-            // Go up a few levels to get the whole right pane
             return descEl.closest('.jobs-search__job-details--wrapper, .job-details-jobs-unified-top-card__container, .jobs-details__main-content, main') || document;
         }
         return document;
     }
-    
     const activePane = getActivePane();
 
-    // 2. Title Extraction
-    let title = null;
-    
-    // First try strict selectors inside the active pane
-    const titleSelectors = [
-      '.job-details-jobs-unified-top-card__job-title h1',
-      '.job-details-jobs-unified-top-card__job-title',
-      '.jobs-unified-top-card__job-title h1',
-      '.jobs-unified-top-card__job-title',
-      'h1[class*="job-title"]',
-      'h2[class*="job-title"]',
-      'div[class*="job-title"]',
-      'h1.t-24',
-      'h1',
-      'h2'
-    ];
-    
-    for (let sel of titleSelectors) {
-        const el = activePane.querySelector(sel);
-        if (el && el.textContent.trim().length > 0) {
-            title = el.textContent.trim();
-            break;
-        }
+    // STRATEGY C: DOM Selectors (Fallback)
+    if (!title) {
+      title = getText([
+        '.job-details-jobs-unified-top-card__job-title h1',
+        '.job-details-jobs-unified-top-card__job-title',
+        '.jobs-unified-top-card__job-title h1',
+        '.jobs-unified-top-card__job-title',
+        'h1[class*="job-title"]',
+        'h2[class*="job-title"]'
+      ], activePane) || "Unknown Title";
     }
-    
-    title = title || cardTitle || "Unknown Title";
 
-    // 3. Company Extraction
-    let company = null;
-    const compSelectors = [
-      '.job-details-jobs-unified-top-card__company-name a',
-      '.job-details-jobs-unified-top-card__company-name',
-      '.jobs-unified-top-card__company-name a',
-      '.jobs-unified-top-card__company-name',
-      'a[class*="company-name"]',
-      'div[class*="company-name"]',
-      '.job-details-jobs-unified-top-card__primary-description-container a'
-    ];
-    
-    for (let sel of compSelectors) {
-        const el = activePane.querySelector(sel);
-        if (el && el.textContent.trim().length > 0) {
-            company = el.textContent.trim();
-            break;
-        }
-    }
-    
-    // Fallback for Company
     if (!company) {
-        // Find all links to company pages INSIDE the active pane
-        const companyLinks = Array.from(activePane.querySelectorAll('a[href*="/company/"]'))
-            .filter(a => a.textContent.trim().length > 0 && a.textContent.trim().length < 60 && !a.textContent.includes('LinkedIn'));
-            
-        if (companyLinks.length > 0) {
-            company = companyLinks[0].textContent.trim();
-        } else {
-            // Try to find an image with "logo" in alt near the top of the active pane
-            const logos = Array.from(activePane.querySelectorAll('img[alt*="logo" i]'));
-            if (logos.length > 0) {
-                company = logos[0].alt.replace(/ logo$/i, '').trim();
-            }
-        }
+      company = getText([
+        '.job-details-jobs-unified-top-card__company-name a',
+        '.job-details-jobs-unified-top-card__company-name',
+        '.jobs-unified-top-card__company-name a',
+        '.jobs-unified-top-card__company-name',
+        'a[class*="company-name"]'
+      ], activePane) || "Unknown Company";
     }
-    company = company || cardCompany || "Unknown Company";
 
-    // 4. Location Extraction
-    let location = getText([
-      '.job-details-jobs-unified-top-card__primary-description-container span.tvm__text',
-      '.job-details-jobs-unified-top-card__bullet',
-      '.jobs-unified-top-card__bullet',
-      'span[class*="workplace-type"]',
-      'span[class*="bullet"]',
-      '[class*="metadata-item"]',
-      '[class*="location"]'
-    ]) || cardLocation || "Unknown Location";
+    if (!location) {
+      location = getText([
+        '.job-details-jobs-unified-top-card__primary-description-container span.tvm__text',
+        '.job-details-jobs-unified-top-card__bullet',
+        '.jobs-unified-top-card__bullet',
+        'span[class*="workplace-type"]',
+        'span[class*="bullet"]'
+      ], activePane) || "Unknown Location";
+    }
 
     // 5. Highly Robust Description Extraction (Heuristic based)
     let descriptionText = "";
@@ -204,16 +171,7 @@ function extractJobFromDOM() {
   }
 }
 
-// Production-grade auto-apply injector
-function triggerAutoApplyDOM() {
-  const applyBtn = document.querySelector('.jobs-apply-button--top-card button');
-  if (applyBtn) {
-    applyBtn.click();
-    return { status: "Auto-apply process started" };
-  } else {
-    return { status: "Easy Apply button not found" };
-  }
-}
+
 
 document.getElementById('scrapeBtn').addEventListener('click', async () => {
   const mainActions = document.getElementById('main-actions');
@@ -311,18 +269,3 @@ document.getElementById('scrapeBtn').addEventListener('click', async () => {
   });
 });
 
-document.getElementById('applyBtn').addEventListener('click', async () => {
-  const statusEl = document.getElementById('status');
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    func: triggerAutoApplyDOM,
-  }, (results) => {
-    if (chrome.runtime.lastError || !results || !results[0]) {
-      statusEl.innerText = "Error communicating with page.";
-      return;
-    }
-    statusEl.innerText = results[0].result.status;
-  });
-});

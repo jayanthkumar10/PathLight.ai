@@ -42,7 +42,7 @@ def get_resume_context(db, master_resume) -> Dict[str, Any]:
         user_prompt = f"Resume Text:\n{master_resume.parsed_text[:10000]}"
         
         try:
-            res = llm.generate_text(sys_prompt, user_prompt, response_mime_type="application/json")
+            res = llm.generate_text(sys_prompt, user_prompt, response_mime_type="application/json", agent_name="ResumeContextHydrationNode")
             
             clean_res = res.strip()
             if clean_res.startswith("```"):

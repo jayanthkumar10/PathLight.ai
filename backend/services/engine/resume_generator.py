@@ -20,8 +20,8 @@ class ResumeGenerator:
         self.llm_client = LLMClient()
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
-    def _call_agent(self, sys_prompt: str, user_prompt: str, model_preference: str) -> dict:
-        raw_output = self.llm_client.generate_text(sys_prompt, user_prompt, model_preference)
+    def _call_agent(self, sys_prompt: str, user_prompt: str, model_preference: str, agent_name: str = "MistralAgent") -> dict:
+        raw_output = self.llm_client.generate_text(sys_prompt, user_prompt, model_preference, response_mime_type="application/json", agent_name=agent_name)
         clean_output = raw_output.strip()
         if clean_output.startswith("```json"):
             clean_output = clean_output[7:]
@@ -39,17 +39,17 @@ class ResumeGenerator:
 
     def generate_summary(self, raw_resume_text, resume_context, job, jd_extraction, gap_analysis, model_pref, feedback=""):
         sys_p, usr_p = build_summary_agent_prompt(raw_resume_text, resume_context, job, jd_extraction, gap_analysis, feedback)
-        result = self._call_agent(sys_p, usr_p, model_pref)
+        result = self._call_agent(sys_p, usr_p, model_pref, agent_name="GenerateSummaryNode")
         return result, sys_p + "\n\n" + usr_p
 
     def generate_experience(self, master_profile_exp, job, jd_extraction, gap_analysis, model_pref, feedback=""):
         sys_p, usr_p = build_dynamic_experience_prompt(master_profile_exp, job, jd_extraction, gap_analysis, feedback)
-        result = self._call_agent(sys_p, usr_p, model_pref)
+        result = self._call_agent(sys_p, usr_p, model_pref, agent_name="GenerateExperienceNode")
         return result, sys_p + "\n\n" + usr_p
 
     def generate_projects(self, master_profile_proj, job, jd_extraction, gap_analysis, model_pref, feedback=""):
         sys_p, usr_p = build_dynamic_projects_prompt(master_profile_proj, job, jd_extraction, gap_analysis, feedback)
-        result = self._call_agent(sys_p, usr_p, model_pref)
+        result = self._call_agent(sys_p, usr_p, model_pref, agent_name="GenerateProjectsNode")
         return result, sys_p + "\n\n" + usr_p
 
     def assemble_html(self, master_profile, job, summary_data, exp_data, proj_data):

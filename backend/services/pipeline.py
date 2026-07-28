@@ -262,6 +262,7 @@ def generate_pdf_node(state: AgentState):
     if state.get("final_status") == "rejected":
         return {}
     db = SessionLocal()
+    from backend.services.evaluations import Evaluator
     try:
         app = db.query(Application).filter(Application.id == state["app_id"]).first()
         if not app:
@@ -276,6 +277,20 @@ def generate_pdf_node(state: AgentState):
         app.missing_keywords = state["ats_feedback"]
         app.application_status = "completed"
         db.commit()
+        
+        # Asynchronously evaluate the AgentRun using LLM-as-a-judge
+        # In a real async setup we'd dispatch this to Celery/BackgroundTasks
+        try:
+            evaluator = Evaluator()
+            evaluator.evaluate_run_async(
+                run_id=state.get("job_id", ""), 
+                original_resume=state["resume_context"].get("parsed_text", ""), 
+                generated_resume=state["assembled_html"], 
+                jd_text=state["norm_job"].get("description_text", "")
+            )
+        except Exception as e:
+            logger.error(f"Failed to kick off evaluation: {e}")
+            
         return {"final_status": "completed", "pdf_path": pdf_path}
     finally:
         db.close()
@@ -318,7 +333,7 @@ graph.add_edge("generate_pdf", END)
 
 compiled_graph = graph.compile()
 
-async def run_single_tailoring_pipeline(job_id: str, jd_text: str, job_url: str, company: str = None, location: str = None):
+async def run_single_tailoring_pipeline(job_id: str, jd_text: str, job_url: str, title: str = None, company: str = None, location: str = None):
     logger.info(f"{'='*60}\nSingle Pipeline START — Job ID: {job_id}\n{'='*60}")
 
     db = SessionLocal()
@@ -329,23 +344,45 @@ async def run_single_tailoring_pipeline(job_id: str, jd_text: str, job_url: str,
 
         _status(db, job, "Preparing", {"started_at": datetime.now(timezone.utc)})
 
+        from backend.models.core import MasterProfile
+        mp = db.query(MasterProfile).first()
+
         master_resume = db.query(MasterResume).order_by(MasterResume.created_at.desc()).first()
-        if not master_resume:
-            logger.error("No master resume found. Cannot tailor.")
+        if not master_resume and not mp:
+            logger.error("No master resume or profile found. Cannot tailor.")
             _status(db, job, "Failed", {"completed_at": datetime.now(timezone.utc)})
             return
             
-        resume_context = get_resume_context(db, master_resume)
-        resume_context["hash"] = master_resume.hash
-        resume_context["parsed_text"] = master_resume.parsed_text
+        if master_resume:
+            resume_context = get_resume_context(db, master_resume)
+            resume_context["hash"] = master_resume.hash
+            resume_context["parsed_text"] = master_resume.parsed_text
+        else:
+            # Fallback to creating a dummy resume context from the MasterProfile
+            mp_dict = mp.model_dump() if hasattr(mp, "model_dump") else mp.__dict__
+            contact = mp_dict.get('contactInfo', {}) or {}
+            resume_context = {
+                "hash": str(uuid.uuid4()),
+                "parsed_text": f"Profile for {contact.get('name', 'Candidate')}",
+                "candidate_name": contact.get('name', 'Candidate'),
+                "current_title": "Professional",
+                "contact_info": contact,
+                "years_of_experience": 2,
+                "education": "",
+                "companies": [],
+                "hard_skills": [],
+                "soft_skills": [],
+                "technical_skills": [],
+                "action_verbs": []
+            }
 
         metadata = extract_jd_metadata(jd_text)
         job.scanned_jobs = 1
         db.commit()
 
         raw_job_data = {
-            "title": metadata.job_title,
-            "company": company if company else metadata.company,
+            "title": title if title and title != "Unknown Title" else metadata.job_title,
+            "company": company if company and company != "Unknown Company" else metadata.company,
             "location": location if location else metadata.location,
             "employmentType": metadata.employment_type,
             "salaryRange": metadata.salary_range,
@@ -432,9 +469,12 @@ async def run_tailoring_pipeline(job_id: str):
 
         _status(db, job, "Preparing", {"started_at": datetime.now(timezone.utc)})
 
+        from backend.models.core import MasterProfile
+        mp = db.query(MasterProfile).first()
+
         master_resume = db.query(MasterResume).order_by(MasterResume.created_at.desc()).first()
-        if not master_resume:
-            logger.error("No master resume found. Cannot tailor.")
+        if not master_resume and not mp:
+            logger.error("No master resume or profile found. Cannot tailor.")
             _status(db, job, "Failed", {"completed_at": datetime.now(timezone.utc)})
             return
             

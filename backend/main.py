@@ -122,7 +122,7 @@ def extension_tailor_job(
     job = tailoring_job_repo.create(db, obj_in=tj_create)
     
     # Run the single pipeline, passing the extension scraped text
-    background_tasks.add_task(run_single_tailoring_pipeline, job.id, job_request.descriptionText, job_request.url, job_request.company, job_request.location)
+    background_tasks.add_task(run_single_tailoring_pipeline, job.id, job_request.descriptionText, job_request.url, job_request.title, job_request.company, job_request.location)
     return job
 
 

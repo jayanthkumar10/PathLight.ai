@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = Field(default="postgresql://postgres:postgres@localhost:5434/pathlight")
     
+    # Observability
+    LANGFUSE_SECRET_KEY: str = Field(default="")
+    LANGFUSE_PUBLIC_KEY: str = Field(default="")
+    LANGFUSE_BASE_URL: str = Field(default="https://us.cloud.langfuse.com")
+    
     class Config:
         env_file = ".env"
         env_file_encoding = 'utf-8'

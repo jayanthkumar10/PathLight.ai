@@ -225,3 +225,71 @@ class MasterProfile(Base):
     updatedAt = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
 
     user = relationship("User", back_populates="masterProfile")
+
+
+class AgentRun(Base):
+    """
+    Structured event for LLM observability, tracking single LLM execution steps.
+    """
+    __tablename__ = "AgentRun"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    runId = Column(String, nullable=False, index=True)
+    traceId = Column(String, nullable=True, index=True)
+    agentName = Column(String, nullable=False)
+    model = Column(String, nullable=False)
+    promptVersion = Column(String, nullable=True)
+    temperature = Column(Integer, nullable=True) # Float typically but schema is flex
+    
+    # Payload
+    input = Column(Text, nullable=True)
+    retrievedContext = Column(Text, nullable=True)
+    toolsUsed = Column(JSON, nullable=True)
+    output = Column(Text, nullable=True)
+    
+    # Metrics
+    confidence = Column(Integer, nullable=True) # Could be float
+    latency = Column(Integer, nullable=True) # In milliseconds
+    tokens = Column(Integer, nullable=True)
+    cost = Column(Integer, nullable=True) # Float but integer is fine for microcents
+    retryCount = Column(Integer, default=0)
+    error = Column(Text, nullable=True)
+    
+    # Quality metrics (populated asynchronously by LLM-as-a-judge)
+    accuracy = Column(Integer, nullable=True)
+    precision = Column(Integer, nullable=True)
+    recall = Column(Integer, nullable=True)
+    f1 = Column(Integer, nullable=True)
+    hallucination = Column(Integer, nullable=True)
+    groundedness = Column(Integer, nullable=True)
+    helpfulness = Column(Integer, nullable=True)
+    toxicity = Column(Integer, nullable=True)
+    completeness = Column(Integer, nullable=True)
+    consistency = Column(Integer, nullable=True)
+
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    userId = Column(String, ForeignKey("User.id", ondelete="SET NULL"), nullable=True)
+
+    user = relationship("User")
+
+
+class AgentMetric(Base):
+    """
+    Aggregate metrics over time.
+    """
+    __tablename__ = "AgentMetric"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    agentName = Column(String, nullable=False, index=True)
+    date = Column(DateTime(timezone=True), server_default=func.now())
+    
+    successRate = Column(Integer, nullable=True)
+    retryPercent = Column(Integer, nullable=True)
+    averageCost = Column(Integer, nullable=True)
+    averageTokens = Column(Integer, nullable=True)
+    averageLatency = Column(Integer, nullable=True)
+    humanOverridePercent = Column(Integer, nullable=True)
+    escalationPercent = Column(Integer, nullable=True)
+    failurePercent = Column(Integer, nullable=True)
+    recoveryPercent = Column(Integer, nullable=True)
+    toolErrorPercent = Column(Integer, nullable=True)
+    reasoningSteps = Column(Integer, nullable=True)
+

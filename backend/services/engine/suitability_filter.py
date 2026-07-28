@@ -49,7 +49,7 @@ def check_job_suitability(job: NormalizedJob, candidate_summary: str, min_confid
             user_prompt=prompt,
             model_preference=model,
             response_mime_type="application/json",
-            observation_name="Suitability Filter"
+            agent_name="SuitabilityFilterNode"
         )
         
         # Clean response
