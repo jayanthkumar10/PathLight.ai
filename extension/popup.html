@@ -7,9 +7,9 @@
     :root {
       --primary: #3b82f6;
       --primary-hover: #2563eb;
-      --primary-glow: rgba(59, 130, 246, 0.5);
-      --bg-dark: #0f172a;
-      --bg-card: rgba(30, 41, 59, 0.7);
+      --primary-glow: rgba(59, 130, 246, 0.4);
+      --bg-dark: #09090b;
+      --bg-card: rgba(24, 24, 27, 0.65);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border: rgba(255, 255, 255, 0.1);
@@ -22,7 +22,6 @@
       padding: 0;
       margin: 0;
       width: 340px;
-      min-height: 400px;
       background: var(--bg-dark);
       background-image: 
         radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
@@ -83,12 +82,12 @@
     
     .glass-card {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     
     button { 
