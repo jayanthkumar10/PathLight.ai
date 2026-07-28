@@ -224,15 +224,15 @@ function createExperienceItem(data = {}) {
         <div class="form-grid">
             <div class="form-group">
                 <label>Job Title</label>
-                <input type="text" placeholder="e.g. Senior Software Engineer" value="${title}">
+                <input type="text" value="${title}">
             </div>
             <div class="form-group">
                 <label>Company</label>
-                <input type="text" placeholder="e.g. Acme Corp" value="${company}">
+                <input type="text" value="${company}">
             </div>
             <div class="form-group">
                 <label>Dates</label>
-                <input type="text" placeholder="e.g. Jan 2020 - Present" value="${date}">
+                <input type="text" value="${date}">
             </div>
         </div>
         <div class="form-group mt-md">
@@ -283,15 +283,15 @@ function createProjectItem(data = {}) {
         <div class="form-grid">
             <div class="form-group">
                 <label>Project Name</label>
-                <input type="text" placeholder="e.g. AI Resume Builder" value="${name}">
+                <input type="text" value="${name}">
             </div>
             <div class="form-group">
                 <label>Technologies Used</label>
-                <input type="text" placeholder="e.g. React, Node.js, OpenAI" value="${tech}">
+                <input type="text" value="${tech}">
             </div>
             <div class="form-group">
                 <label>Link (Optional)</label>
-                <input type="url" placeholder="e.g. github.com/project" value="${link}">
+                <input type="url" value="${link}">
             </div>
         </div>
         <div class="form-group mt-md">
@@ -339,19 +339,19 @@ function createEducationItem(data = {}) {
         <div class="form-grid">
             <div class="form-group">
                 <label>Degree</label>
-                <input type="text" placeholder="e.g. B.S. Computer Science" value="${degree}">
+                <input type="text" value="${degree}">
             </div>
             <div class="form-group">
                 <label>University / School</label>
-                <input type="text" placeholder="e.g. Stanford University" value="${school}">
+                <input type="text" value="${school}">
             </div>
             <div class="form-group">
                 <label>Dates</label>
-                <input type="text" placeholder="e.g. 2018 - 2022" value="${date}">
+                <input type="text" value="${date}">
             </div>
             <div class="form-group">
                 <label>CGPA</label>
-                <input type="text" placeholder="e.g. 3.8 / 4.0" value="${data.cgpa || ''}">
+                <input type="text" value="${data.cgpa || ''}">
             </div>
         </div>
     `;
@@ -383,16 +383,16 @@ function createAchievementItem(data = {}) {
         <div class="form-grid">
             <div class="form-group">
                 <label>Title</label>
-                <input type="text" placeholder="e.g. Published Patent" value="${title}">
+                <input type="text" value="${title}">
             </div>
             <div class="form-group">
                 <label>Date (Optional)</label>
-                <input type="text" placeholder="e.g. 2023" value="${date}">
+                <input type="text" value="${date}">
             </div>
         </div>
         <div class="form-group mt-md">
             <label>Description</label>
-            <textarea rows="3" placeholder="Describe the achievement...">${description}</textarea>
+            <textarea rows="3">${description}</textarea>
         </div>
     `;
 
@@ -411,7 +411,7 @@ function createBulletItem(content = '') {
     div.className = 'bullet-item';
     
     div.innerHTML = `
-        <textarea placeholder="Describe your accomplishment...">${content}</textarea>
+        <textarea>${content}</textarea>
         <button class="remove-btn" title="Remove Bullet">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
